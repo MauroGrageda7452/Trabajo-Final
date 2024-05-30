@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.40.0",
+    "@tanstack/react-query-devtools": "^5.40.0",
     "bcrypt": "^5.1.1",
     "mongodb": "^6.6.1",
     "mongoose": "^8.3.4",
@@ -16,6 +18,7 @@
     "phaser": "^3.80.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {

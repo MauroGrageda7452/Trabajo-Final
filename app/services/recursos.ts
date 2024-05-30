@@ -39,6 +39,7 @@ export const getRecursoList = async (): Promise<{ agua_jugador: number, comida_j
     if (!recursos) {
       throw new Error('Recursos no disponibles en la partida.');
     }
+    console.log(recursos)
 
     const { agua_jugador, comida_jugador, chatarra_jugador }  = recursos;
     return { agua_jugador, comida_jugador, chatarra_jugador };

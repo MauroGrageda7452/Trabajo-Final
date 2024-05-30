@@ -12,13 +12,24 @@ interface Recurso {
 interface Props {
   items: Recurso[];
 }
+// interface ResourcesProps {
+//   items: {
+//     agua_jugador: number;
+//     comida_jugador: number;
+//     chatarra_jugador: number;
+//   } | null;
+// }
 
 type ResourcesProps = {
-  items: PartidaType['recursos'];
+  items: PartidaType['recursos'] | null;
 };
 
 
 const Resources: React.FC<ResourcesProps> = ({ items }) => {
+  // if (!items) {
+  //   return <div>Error loading resources</div>;
+  // }
+
   return (
     <div className="p-4 text-white">
       <div className="flex space-x-4">
