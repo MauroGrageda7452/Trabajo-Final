@@ -7,11 +7,7 @@ import { PartidaType } from "./models/partidas";
 import { EdificioType } from "./models/edificios";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useMutation } from "react-query";
-
-const queryClient = new QueryClient();
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 export default function Home() {
   // const [recursosData, setRecursosData] = useState<PartidaType['recursos'] | null>(null);
@@ -22,10 +18,12 @@ export default function Home() {
 
   const { data: recursosData, isLoading: recursosLoading, isError: recursosError } = useQuery({
     queryKey: ['recursos'],
-    queryFn: getRecursoList,
+    queryFn: () => getRecursoList(),
   });
-  const actualizarRecursosMutation = useMutation(actualizarRecursoJugador);
-
+  const actualizarRecursosMutation = useMutation({
+    mutationFn: (recurso: { name: string, cantidad: number }) => actualizarRecursoJugador(recurso),
+  });
+  const queryClient = useQueryClient()
 
   const handleRecursosUpdate = async (updateRecursos: PartidaType['recursos']) => {
     try{
@@ -81,7 +79,6 @@ export default function Home() {
   // };
 
   return (
-    <QueryClientProvider client={queryClient}>
     <main className="flex min-h-screen flex-col items-center justify-between">  
       {/* {showLogin && <Login onLogin={handleLogin} onRegister={handleRegister} />} */}
       {/* {showRegister && <Register onRegister={() => {setShowRegister(false); setShowLogin(true);}} />} */}
@@ -99,9 +96,6 @@ export default function Home() {
         )}
 
     </main>
-    <ReactQueryDevtools initialIsOpen={false}/>
-    </QueryClientProvider>
-
   );
   
 }
