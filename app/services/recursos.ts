@@ -66,19 +66,14 @@ export const actualizarRecursoJugador = async (recurso: { name: string, cantidad
     let recursoActualizado;
     switch (recurso.name) {
       case 'agua':
-        recursoActualizado = recursos.agua_jugador - recurso.cantidad;
-        if (recursoActualizado < 0) recursoActualizado = 0;
-        recursos.agua_jugador = recursoActualizado;
+        //recursoActualizado = recursos.agua_jugador - recurso.cantidad;
+        recursos.agua_jugador = recurso.cantidad;
         break;
       case 'comida':
-        recursoActualizado = recursos.comida_jugador - recurso.cantidad;
-        if (recursoActualizado < 0) recursoActualizado = 0;
-        recursos.comida_jugador = recursoActualizado;
+        recursos.comida_jugador = recurso.cantidad;
         break;
       case 'chatarra':
-        recursoActualizado = recursos.chatarra_jugador - recurso.cantidad;
-        if (recursoActualizado < 0) recursoActualizado = 0;
-        recursos.chatarra_jugador = recursoActualizado;
+        recursos.chatarra_jugador = recurso.cantidad;
         break;
       default:
         throw new Error('Recurso desconocido.');

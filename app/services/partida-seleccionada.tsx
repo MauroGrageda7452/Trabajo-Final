@@ -12,10 +12,15 @@ export const fetchSave = async (userId: number): Promise<PartidaType | null> => 
   }
 };
 
-export const fetchSaveEdificios = async (): Promise<EdificioType[] | null> => {
+
+export const fetchSaveEdificios = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
     const response = await fetch(`http://localhost:3000/api/buildings`);
     const data: EdificioType[] = await response.json()
+    if (!base){
+      data.shift();
+    }
+    //data.shift();
     return data;
   } catch (error) {
     console.error("Error fetching Edificios:", error);

@@ -38,10 +38,10 @@ import {fetchSaveEdificios, fetchSave, updateSave } from "./partida-seleccionada
 
 
 // Función para obtener la lista de edificios
-export const getEdificioList = async (): Promise<EdificioType[] | null> => {
+export const getEdificioList = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
     
-    const edificios_menu = await fetchSaveEdificios();
+    const edificios_menu = await fetchSaveEdificios(base);
     if(edificios_menu){
     }
 

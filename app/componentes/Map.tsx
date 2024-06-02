@@ -15,13 +15,13 @@ import { actualizarRecursoJugador, getRecursoList } from "../services/recursos";
 // import { useQuery } from '@tanstack/react-query';
 
 interface MapProps {
-  recursos: PartidaType['recursos'];
+  // recursos: PartidaType['recursos'];
   edificios: EdificioType[] ;
-  onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
+  // onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
   //terrenoBool:  Record<string, boolean>;
 }
 
-const Map: React.FC<MapProps> = ({recursos,edificios,onRecursosUpdate}) => {
+const Map: React.FC<MapProps> = ({edificios}) => {
   const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 5 }, () => ''));
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [showConstruir, setShowConstruir] = useState(false);
@@ -89,11 +89,11 @@ const Map: React.FC<MapProps> = ({recursos,edificios,onRecursosUpdate}) => {
     <main>
       <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
         <div className="flex justify-start items-start bg-black">
-          {<Resources items={recursos} /> }
+          {<Resources/> }
         </div>
         <div className="flex flex-1 flex-col justify-end items-center relative">
-          {/* <BuildingGrid   edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} 
-          onBuildGroundClick={handleBuiltGroundClick}/> */}
+          {<BuildingGrid   edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} 
+          onBuildGroundClick={handleBuiltGroundClick}/> }
           <div className="h-40 w-screen flex relative">
             {/* Imagen de starcraf2 
             <img src="/placeholders/marco-starcraft2-png.png" alt="marco de abajo" className="w-full h-48" /> */}
@@ -101,7 +101,7 @@ const Map: React.FC<MapProps> = ({recursos,edificios,onRecursosUpdate}) => {
             {showBuildMenu && (
               <div className="absolute top-0 w-full">
                 <div className="w-1/2 ">
-                  {/* <BuildingMenu  indiceTerreno={indiceTerreno}playerId={1000}  edificios={edificios} onRecursosUpdate={onRecursosUpdate}onItemClick={handleItemClick} /> */}
+                  {<BuildingMenu  indiceTerreno={indiceTerreno}playerId={1000}  onItemClick={handleItemClick} />}
                   {showConstruir && (
                     <div className="flex flex-row justify-end items-end">
                       <Button onClick={() => handleConstruirClick(selectedGround || 0)} text={"Construir"} className="bg-green-600 mr-1"/>

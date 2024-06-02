@@ -2,6 +2,7 @@
 // Resources.tsx
 import React from "react";
 import { PartidaType } from "../models/partidas";
+import { useRecursos } from "../hook/recursosConQuery";
 
 interface Recurso {
   id: number;
@@ -21,29 +22,30 @@ interface Props {
 // }
 
 type ResourcesProps = {
-  items: PartidaType['recursos'] | null;
+  // items: PartidaType['recursos'] | null;
 };
 
 
-const Resources: React.FC<ResourcesProps> = ({ items }) => {
+const Resources: React.FC = () => {
   // if (!items) {
   //   return <div>Error loading resources</div>;
   // }
+  const {recursosData} = useRecursos();
 
   return (
     <div className="p-4 text-white">
       <div className="flex space-x-4">
         <div className="flex items-center space-x-2">
           <span>Agua:</span>
-          <span>{items?.agua_jugador}</span>
+          <span>{recursosData?.agua_jugador}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span>Comida:</span>
-          <span>{items?.comida_jugador}</span>
+          <span>{recursosData?.comida_jugador}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span>Chatarra:</span>
-          <span>{items?.chatarra_jugador}</span>
+          <span>{recursosData?.chatarra_jugador}</span>
         </div>
       </div>
     </div>

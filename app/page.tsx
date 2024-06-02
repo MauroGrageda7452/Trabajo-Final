@@ -10,38 +10,12 @@ import Register from "./pages/register";
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 export default function Home() {
-  // const [recursosData, setRecursosData] = useState<PartidaType['recursos'] | null>(null);
   const [edificiosData, setEdificiosData] = useState<EdificioType[]>([]);
   const [showLogin, setShowLogin] = useState(true); // Para agregar a lo nuevo
   const [showRegister, setShowRegister] = useState(false);
   const [showMap, setShowMap] = useState(true); // este cambio a true
 
-  const { data: recursosData, isLoading: recursosLoading, isError: recursosError } = useQuery({
-    queryKey: ['recursos'],
-    queryFn: () => getRecursoList(),
-  });
-  const actualizarRecursosMutation = useMutation({
-    mutationFn: (recurso: { name: string, cantidad: number }) => actualizarRecursoJugador(recurso),
-  });
-  const queryClient = useQueryClient()
-
-  const handleRecursosUpdate = async (updateRecursos: PartidaType['recursos']) => {
-    try{
-      if (updateRecursos){
-        // Actualizar recurso agua
-        await actualizarRecursosMutation.mutateAsync({ name: 'agua', cantidad: updateRecursos.agua_jugador });
-        // Actualizar recurso comida
-        await actualizarRecursosMutation.mutateAsync({ name: 'comida', cantidad: updateRecursos.comida_jugador });
-        // Actualizar recurso chatarra
-        await actualizarRecursosMutation.mutateAsync({ name: 'chatarra', cantidad: updateRecursos.chatarra_jugador });
-    
-        queryClient.invalidateQueries({queryKey:['recursos']});  
-      }
-      }catch(error){
-      console.error('Error al actualizar recursos', error)
-    }
-  };
-
+  
   // useEffect(() => {
 
   //   const fetchData = async () => {
@@ -87,13 +61,8 @@ export default function Home() {
           <Map recursos={recursosData}edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} />
         )
       )} */}
-      {recursosLoading? (
-          <div>Cargando...</div>
-        ) : recursosError ? (
-          <div>Error al cargar recursos o edificios</div>
-        ) : (
-          <Map recursos={recursosData ?? null} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} />
-        )}
+        <Map edificios={edificiosData}/>
+      
 
     </main>
   );
