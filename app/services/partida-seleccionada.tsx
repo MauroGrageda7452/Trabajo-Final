@@ -1,7 +1,7 @@
 import { EdificioType } from "../models/edificios";
 import partidas, { PartidaType } from "../models/partidas";
 
-export const fetchSave = async (userId: number): Promise<PartidaType | null> => {
+export const fetchSave = async (userId: number | null): Promise<PartidaType | null> => {
   try {
     const response = await fetch(`http://localhost:3000/api/saves/${userId}`);
     const data: PartidaType = await response.json()

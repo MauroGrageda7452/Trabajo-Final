@@ -1,7 +1,8 @@
 // BuildingGrid.tsx
-import React, { useState, useEffect, Key } from "react";
+import React, { useState, useEffect} from "react";
 import { EdificioType } from "@/app/models/edificios";
 import { fetchSave } from "@/app/services/partida-seleccionada";
+import { PartidaType } from "@/app/models/partidas";
 //import Partidas, { PartidaType } from "@/app/models/partidas";
 //import { getEdificioList } from "../../services/edificios-menu";
 //import baseimage from '../images/placeholders/base_ph.png'
@@ -14,18 +15,19 @@ interface Props {
   onEmptyGroundClick: (index: number) => void;
   edificios : EdificioType[];
   onBuildGroundClick: (index: number) => void;
+  partidaJugadorId: number;
 }
 
-const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGroundClick}) => {
+const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGroundClick, partidaJugadorId}) => {
   const [edificiosPartida, setEdificiosPartida] = useState<EdificioType[]>([]); 
   const [terreno, setTerreno] = useState<Record<string, number>>({});
   const [buildingImages, setBuildingImages] = useState<string[]>([])
   const [terrenoBool, setTerrenoBool] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const fetchPartidaActual = async () => {
+    const fetchPartidaEdificios = async () => {
       try {
-        const data = await fetchSave(1000);
+        const data = await fetchSave(partidaJugadorId);
         const terreno = data?.terreno;
         if (terreno && typeof terreno === 'object') {
           setTerreno(terreno);
@@ -62,7 +64,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
         console.error("Error al cargar los datos de la partida:", error);
       }
     };
-    fetchPartidaActual();
+    fetchPartidaEdificios();
   }, [edificios]);
 
   const getImageStyle = (imageUrl: string) => ({
@@ -71,13 +73,14 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
     backgroundPosition: 'center bottom', 
     backgroundRepeat: 'no-repeat',
   });
+
   return (
     <div className="flex flex-row">
       {buildingImages.map((imageUrl, index) => (
         <div
           key={index}
           style={getImageStyle(imageUrl)}
-          className="h-48 w-48 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-30"
+          className="h-64 w-64 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
           onClick={() => {
             //const key = index.toString();
             //console.log(terrenoBool[index])

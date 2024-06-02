@@ -27,15 +27,8 @@ import { EdificioType } from "../models/edificios";
 import { PartidaType } from "../models/partidas";
 import { fetchSave, updateSave } from "./partida-seleccionada"; 
 
-export const getRecursoList = async (): Promise<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number } | null> => {
+export const getRecursoList = async (recursos: PartidaType['recursos']): Promise<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number } | null> => {
   try {
-    const partidaActual = await fetchSave(1000);
-    // console.log(partidaActual)
-    if (!partidaActual) {
-      throw new Error('Partida no encontrada');
-    }
-
-    const recursos = partidaActual.recursos;
     if (!recursos) {
       throw new Error('Recursos no disponibles en la partida.');
     }

@@ -17,14 +17,13 @@ interface MapProps {
   recursos: PartidaType['recursos'];
   edificios: EdificioType[] ;
   onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
+  partida: number;
   //terrenoBool:  Record<string, boolean>;
 }
 
-const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
+const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida}) => {
   const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 5 }, () => ''));
   const [showBuildMenu, setShowBuildMenu] = useState(false);
-  const [showConstruir, setShowConstruir] = useState(false);
-  const [selectedBuilding, setSelectedBuilding] = useState<EdificioType>();
   const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
   
@@ -32,7 +31,6 @@ const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
     setShowBuildMenu(true);
     setSelectedGround(index);
     setIndiceTerreno(index);
-    
   };
 
   const handleBuiltGroundClick = (index: number) => {
@@ -42,12 +40,16 @@ const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
     
   };
 
-  const handleItemClick = (index: number) => {
-    setShowConstruir(true);
-    setSelectedBuilding(edificios[index]);
-  };
+  const hideBuildMenu = () => {
+    setShowBuildMenu(false)
+  }
 
-  const handleConstruirClick = (index: number) => {
+  /*const handleItemClick = (index: number) => {
+    //setShowConstruir(true);
+    setSelectedBuilding(edificios[index]);
+  };*/
+
+  /*const handleConstruirClick = (index: number) => {
   //   const newBuildingImages = [...buildingImages];
   //   newBuildingImages[1] = '/placeholders/base_ph.png';
   //   const selectedImage = selectedBuilding?.imagen || null;
@@ -60,37 +62,26 @@ const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
   //   // }
     setShowConstruir(false);
     setShowBuildMenu(false);
-  };
+  };*/
   
 
   
   return (
-    <main>
-      <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
-        <div className="flex justify-start items-start bg-black">
-          <Resources items={recursos} />
-        </div>
-        <div className="flex flex-1 flex-col justify-end items-center relative">
-          <BuildingGrid   edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} 
-          onBuildGroundClick={handleBuiltGroundClick}/>
-          <div className="h-40 w-screen flex relative">
-            {/* Imagen de starcraf2 
-            <img src="/placeholders/marco-starcraft2-png.png" alt="marco de abajo" className="w-full h-48" /> */}
-            {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
-            {showBuildMenu && (
-              <div className="absolute top-0 w-full">
-                <div className="w-1/2 ">
-                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={1000}  edificios={edificios} onRecursosUpdate={onRecursosUpdate}onItemClick={handleItemClick} />
-                  {showConstruir && (
-                    <div className="flex flex-row justify-end items-end">
-                      <Button onClick={() => handleConstruirClick(selectedGround || 0)} text={"Construir"} className="bg-green-600 mr-1"/>
-                      <Button onClick={() => setShowBuildMenu(false)} text={"Cancelar"} className="bg-red-600 mr-2"/>
-                    </div>
-                  )}
-                </div>
+    <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
+      <div className="flex justify-start items-start bg-black ">
+        <Resources items={recursos} />
+      </div>
+      <div className="flex flex-1 flex-col justify-end items-center relative">
+        <BuildingGrid edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick} partidaJugadorId={partida}/>
+        <div className="h-24 w-full bg-ground-color p-4">
+          {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
+          {showBuildMenu && (
+            <div className="absolute top-0 w-full flex justify-center">
+              <div className="w-1/2">
+                <BuildingMenu indiceTerreno={indiceTerreno} playerId={1000} edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </main>
