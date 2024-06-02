@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 interface LoginProps {
-    onLogin: () => void;
+    onLogin: (userId: string) => void;
     onRegister: () => void;
 }
 
@@ -27,9 +27,10 @@ const Login: React.FC<LoginProps> = ({ onLogin, onRegister }) => {
                 const errorData = await response.json(); // Lee la respuesta del servidor
                 throw new Error(errorData.error); // Lanza un error con el mensaje del servidor
             }
-    
+            
+            const data = await response.json();
             console.log('Login successful');
-            onLogin(); // Llamamos a la función pasada por prop para cambiar la vista
+            onLogin(data.userId); // Llamamos a la función pasada por prop para cambiar la vista
         } catch (error) {
             // Maneja el error específico aquí
             setError(String(error)); // Muestra el mensaje de error del servidor

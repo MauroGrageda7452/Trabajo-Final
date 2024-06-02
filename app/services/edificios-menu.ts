@@ -44,7 +44,7 @@ export const getEdificioList = async (): Promise<EdificioType[] | null> => {
     const edificios_menu = await fetchSaveEdificios();
     if(edificios_menu){
     }
-
+    //edificios_menu?.shift();
     return edificios_menu;
   } catch (error) {
     console.error('Error al obtener la lista de edificios:', error);

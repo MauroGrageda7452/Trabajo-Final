@@ -22,6 +22,6 @@ export async function POST(request: Request) {
     }
 
     // Si la contraseña es válida, retornar el usuario
-    return NextResponse.json(usuario);
+    return NextResponse.json({ userId: usuario.id, message: "Login successful" });
 }
 
