@@ -42,9 +42,9 @@ export const getRecursoList = async (recursos: PartidaType['recursos']): Promise
 };
 
 
-export const actualizarRecursoJugador = async (recurso: { name: string, cantidad: number }): Promise<PartidaType | null> => {
+export const actualizarRecursoJugador = async (recurso: { name: string, cantidad: number }, partida: number): Promise<PartidaType | null> => {
   
-  const partidaActual = await fetchSave(1000);
+  const partidaActual = await fetchSave(partida);
   if (!partidaActual) {
     throw new Error('No se encontró la partida del jugador.');
   }

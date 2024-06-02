@@ -116,9 +116,9 @@ const handleConstruirClick = async (index: number) => {
 
     // Actualizar los recursos después de la construcción del edificio
     await Promise.all([
-      actualizarRecursoJugador({ name: "agua", cantidad:  agua }),
-      actualizarRecursoJugador({ name: "comida", cantidad: comida }),
-      actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra })    
+      actualizarRecursoJugador({ name: "agua", cantidad:  agua }, partidaJugadorId),
+      actualizarRecursoJugador({ name: "comida", cantidad: comida }, partidaJugadorId),
+      actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra }, partidaJugadorId)    
     ]);
     //console.log(agua_jugador)
     
