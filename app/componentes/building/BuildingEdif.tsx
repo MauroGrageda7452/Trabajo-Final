@@ -10,9 +10,9 @@ import { PartidaType } from "@/app/models/partidas";
 
 interface Props {
   edificios: EdificioType[];
-  recursos: PartidaType;
-  setRecursos: React.Dispatch<React.SetStateAction<PartidaType>> ; 
-  onRecursosUpdate: (updatedRecursos: PartidaType) => void;
+  //recursos: PartidaType;
+  //setRecursos: React.Dispatch<React.SetStateAction<PartidaType>> ; 
+  //onRecursosUpdate: (updatedRecursos: PartidaType) => void;
 }
 
 /*
@@ -24,7 +24,7 @@ interface Props {
   falta poder agregar los obreros en los edificios. (creo que aca voy a necesitar agregar algo en la base de datos pero nose).
 */
 
-const BuildingEdif: React.FC<Props> = ({ edificios, onRecursosUpdate }) => {
+const BuildingEdif: React.FC<Props> = ({ edificios }) => {
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType | null>(null);
   const [nivel, setNivel] = useState<number>(1);
   const [recursos, setRecursos] = useState<PartidaType["recursos"] | null>(null);
