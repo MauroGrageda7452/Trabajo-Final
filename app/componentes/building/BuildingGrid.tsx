@@ -11,7 +11,7 @@ interface Props {
 
 const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGroundClick }) => {
   const [edificiosPartida, setEdificiosPartida] = useState<EdificioType[]>([]); 
-  const [terreno, setTerreno] = useState<Record<string, number>>({});
+  //const [terreno, setTerreno] = useState<Record<string, number>>({});
   const [buildingImages, setBuildingImages] = useState<string[]>([])
   const [terrenoBool, setTerrenoBool] = useState<Record<string, boolean>>({});
 
@@ -21,7 +21,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
         const data = await fetchSave(1000);
         const terreno = data?.terreno;
         if (terreno && typeof terreno === 'object') {
-          setTerreno(terreno);
+          //setTerreno(terreno);
           const newBuildingImages = [];
           //const newTerrenoBool: Record<string, boolean> = {};
           for (const key in terreno) {
@@ -33,10 +33,10 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
               if (edificio) {
                 newBuildingImages.push(edificio.imagen);
                 //console.log(newBuildingImages)
-                terrenoBool[key] = true;
+                //terrenoBool[key] = true;
               }else{
                 newBuildingImages.push('');
-                terrenoBool[key] = false;
+                //terrenoBool[key] = false;
               }
               //console.log(terrenoBool)
             } 
@@ -46,7 +46,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
           
           
         } else {
-          setTerreno({});
+          //setTerreno({});
           setBuildingImages([]);
           setTerrenoBool({});
         }       
