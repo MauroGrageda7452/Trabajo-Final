@@ -14,7 +14,6 @@ export const useRecursos = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey:['recursos']});
         },
-        //onSettled()
     });
 
     const handleRecursosUpdate = async (agua_jugador: number, comida_jugador: number, chatarra_jugador: number ) => {

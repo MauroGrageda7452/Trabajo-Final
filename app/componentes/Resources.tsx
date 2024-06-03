@@ -47,6 +47,11 @@ const Resources: React.FC = () => {
           <span>Chatarra:</span>
           <span>{recursosData?.chatarra_jugador}</span>
         </div>
+
+        <div className="flex items-center space-x-2">
+          <span>Trabajadores:</span>
+          <span>{recursosData?.trabajadores_jugador || 0}</span>
+        </div>     
       </div>
     </div>
   );

@@ -6,15 +6,11 @@ import { useBuildingImages } from "@/app/hook/edficiosConQuery";
 
 interface Props {
   onEmptyGroundClick: (index: number) => void;
-  edificios : EdificioType[];
   onBuildGroundClick: (index: number) => void;
 }
 
-const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGroundClick}) => {
-  // const [edificiosPartida, setEdificiosPartida] = useState<EdificioType[]>([]); 
-  // const [terreno, setTerreno] = useState<Record<string, number>>({});
-  // const [buildingImages, setBuildingImages] = useState<string[]>([])
-  // const [terrenoBool, setTerrenoBool] = useState<Record<string, boolean>>({});
+const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, onBuildGroundClick}) => {
+
   const buildingImages = useBuildingImages().buildingImages;
 
   const getImageStyle = (imageUrl: string) => ({

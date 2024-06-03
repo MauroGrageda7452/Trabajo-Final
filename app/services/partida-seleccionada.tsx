@@ -34,7 +34,7 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
   try {
     //console.log(data)
     const player_id = data.player_id
-    const response = await fetch(`http://localhost:3000/api/saves/1000`, {
+    const response = await fetch(`http://localhost:3000/api/saves/1002`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

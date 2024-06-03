@@ -1,54 +1,73 @@
-// export default Map;
-import React, { useEffect, useState } from "react";
-//import { Recurso } from "../services/recursos";
-//import { Edificio } from "../models/edificios";
-//import BuildingMenu from "./building/BuildingMenu";
 import BuildingGrid from "./building/BuildingGrid";
 import Resources from "./Resources";
 import Button from "./ui/Button";
-//import baseimg from "../public/placeholders/base_ph.png"
-import { getEdificioList } from "../services/edificios-menu";
-import { PartidaType } from "../models/partidas";
-import { EdificioType } from "../models/edificios";
+// import edificios, { EdificioType } from "../models/edificios";
 import BuildingMenu from "./building/BuildingMenu";
-import { actualizarRecursoJugador, getRecursoList } from "../services/recursos";
-// import { useQuery } from '@tanstack/react-query';
-
+import { useEdificios } from "../hook/edficiosConQuery";
+import { EdificioType } from "../models/edificios";
+import { useCallback, useEffect, useRef , useState} from "react";
+import { calculateTimeForBuildingPozo, generarRecursosAgua } from "./Edificios-funcional/pozo-fun";
+import { useQueryClient } from "@tanstack/react-query";
+import { fetchSave } from "../services/partida-seleccionada";
+import { calculateTimeForBuildingCriadero, generarRecursosCriadero } from "./Edificios-funcional/criadero-fun";
+import { calculateTimeForBuildingChatarra, generarRecursosChatarra } from "./Edificios-funcional/chatarreria-fun";
 interface MapProps {
-  // recursos: PartidaType['recursos'];
-  edificios: EdificioType[] ;
-  // onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
-  //terrenoBool:  Record<string, boolean>;
 }
 
-const Map: React.FC<MapProps> = ({edificios}) => {
-  const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 5 }, () => ''));
+const Map: React.FC<MapProps> = () => {
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [showConstruir, setShowConstruir] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType>();
   const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
+
+
+  const queryClient = useQueryClient();
+  const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
+
+
+  const startResourceGeneration = useCallback(async () => {
+    const partida = await fetchSave(1002);
+    if (!partida || !partida.terreno) return;
+
+    for (const key in partida.terreno) {
+      const edificioId = partida.terreno[key];
+      console.log(edificioId)
+      if (edificioId === 1) {
+        const intervalId = setInterval(async () => {
+          await generarRecursosAgua(1002, 3); // Nivel 3 como ejemplo
+          queryClient.invalidateQueries({ queryKey: ['recursos'] });
+        }, calculateTimeForBuildingPozo(3));
+        intervalRefs.current.push(intervalId);
+      }else if (edificioId === 2 ){
+        const intervalId = setInterval(async () => {
+          await generarRecursosCriadero(1002, 3); // Nivel 3 como ejemplo
+          queryClient.invalidateQueries({ queryKey: ['recursos'] });
+        }, calculateTimeForBuildingCriadero(3));
+        intervalRefs.current.push(intervalId);
+        
+      }else if (edificioId === 3){
+        const intervalId = setInterval(async () => {
+          await generarRecursosChatarra(1002, 3); // Nivel 3 como ejemplo
+          queryClient.invalidateQueries({ queryKey: ['recursos'] });
+        }, calculateTimeForBuildingChatarra(3));
+        intervalRefs.current.push(intervalId);
+      }
+    }
+  }, [queryClient]);
+
+  useEffect(() => {
+    startResourceGeneration();
+    console.log("hola")
+    return () => {
+      // Clear all intervals when the component unmounts
+      intervalRefs.current.forEach(interval => clearInterval(interval as number));
+    };
+  }, [startResourceGeneration]);
+
+
+  const edificios = useEdificios().edificiosData;
   
-  // const recursos = useQuery({
-  //   queryKey: ['recursosJuego'],
-  //   queryFn: getRecursoList
-  // });
-  //const recursos;
-
-  // useEffect(() => {
-  //    //if (recursos.data){
-  //      //onRecursosUpdate(recursos.data.agua_jugador);
-  //    //}
-  //    //console.log (recursos)
-  // }, [recursos,onRecursosUpdate])
-
-  // if (recursos) {
-  //   // Puedes usar los datos aquí
-  //   console.log(recursos);
-  // }
-
-  // console.log(recursos);
-
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
     setSelectedGround(index);
@@ -58,27 +77,17 @@ const Map: React.FC<MapProps> = ({edificios}) => {
 
   const handleBuiltGroundClick = (index: number) => {
     console.log('ffddyh')
+    setShowBuildMenu(false);
     setSelectedGround(index);
     setIndiceTerreno(index);
-    
   };
 
   const handleItemClick = (index: number) => {
+    if (edificios) {setSelectedBuilding(edificios[index]);}
     setShowConstruir(true);
-    setSelectedBuilding(edificios[index]);
   };
 
   const handleConstruirClick = (index: number) => {
-  //   const newBuildingImages = [...buildingImages];
-  //   newBuildingImages[1] = '/placeholders/base_ph.png';
-  //   const selectedImage = selectedBuilding?.imagen || null;
-  //   if (selectedImage !== null && index !== 1){
-  //     newBuildingImages[index] = selectedImage;
-  //     setBuildingImages(newBuildingImages);
-  //   }
-  //   // if(selectedBuilding){
-  //   //   const updatedPartida = await actualizarRecursoJugador({name:"chatarra ", cantidad:selectedBuilding.costoRecursoscreacion})
-  //   // }
     setShowConstruir(false);
     setShowBuildMenu(false);
   };
@@ -89,11 +98,10 @@ const Map: React.FC<MapProps> = ({edificios}) => {
     <main>
       <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
         <div className="flex justify-start items-start bg-black">
-          {<Resources/> }
+          <Resources/> 
         </div>
         <div className="flex flex-1 flex-col justify-end items-center relative">
-          {<BuildingGrid   edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} 
-          onBuildGroundClick={handleBuiltGroundClick}/> }
+          <BuildingGrid  onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
           <div className="h-40 w-screen flex relative">
             {/* Imagen de starcraf2 
             <img src="/placeholders/marco-starcraft2-png.png" alt="marco de abajo" className="w-full h-48" /> */}
@@ -101,7 +109,7 @@ const Map: React.FC<MapProps> = ({edificios}) => {
             {showBuildMenu && (
               <div className="absolute top-0 w-full">
                 <div className="w-1/2 ">
-                  {<BuildingMenu  indiceTerreno={indiceTerreno}playerId={1000}  onItemClick={handleItemClick} />}
+                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={1002}  onItemClick={handleItemClick} />
                   {showConstruir && (
                     <div className="flex flex-row justify-end items-end">
                       <Button onClick={() => handleConstruirClick(selectedGround || 0)} text={"Construir"} className="bg-green-600 mr-1"/>

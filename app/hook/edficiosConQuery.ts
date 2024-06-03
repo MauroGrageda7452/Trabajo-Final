@@ -1,7 +1,5 @@
 import { useQuery,useMutation, useQueryClient} from "@tanstack/react-query";
-// import { actualizarRecursoJugador } from "./recursos";
 import { getEdificioList } from "../services/edificios-menu";
-import { EdificioType } from "../models/edificios";
 import { fetchSave } from "../services/partida-seleccionada";
 
 export const useEdificios = () => {
@@ -10,7 +8,6 @@ export const useEdificios = () => {
         queryKey: ['edificios'],
         queryFn: () => getEdificioList(false),
     });
-    //edificiosData?.shift();
     return {
         edificiosData, 
         edificiosLoading,
@@ -22,7 +19,7 @@ export const useEdificios = () => {
 const fetchBuildingsImages = async() => {
 
     const edificiosData = await getEdificioList(true);
-    const partida = await fetchSave(1000);
+    const partida = await fetchSave(1002);
     const terreno = partida?.terreno;
   
     if (terreno && typeof terreno === 'object') {
@@ -65,9 +62,6 @@ export const useBuildingImages = () => {
         return []
     };
 
-    // const updatedBuildingImages = () => {
-    //     updatedBuildingImagesMutation.mutate();
-    // }
 
     return {
         buildingImages, actualizarBuildingMutation 
