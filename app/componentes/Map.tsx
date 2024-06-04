@@ -70,6 +70,7 @@ const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
   const handleItemClick = (index: number) => {
     setShowConstruir(true);
     setSelectedBuilding(edificios[index]);
+    setShowBuildingEdif(true);
   };
 
   const handleConstruirClick = (index: number) => {
@@ -102,7 +103,9 @@ const Map: React.FC<MapProps> = ({recursos, edificios,onRecursosUpdate}) => {
             </div>
           )}
           {showBuildingEdif &&  (
-              <BuildingEdif edificios={edificios} />
+            <div className="absolute top-0 w-full">
+              <BuildingEdif edificios={edificios} recursos={recursos} />
+              </div>
             )}
         </div>
       </div>

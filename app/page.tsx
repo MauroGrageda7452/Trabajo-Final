@@ -4,9 +4,10 @@ import Map from "./componentes/Map";
 import { getEdificioList } from "./services/edificios-menu";
 import { getRecursoList } from "./services/recursos";
 import { PartidaType } from "./models/partidas";
-import { EdificioType } from "./models/edificios";
+import edificios, { EdificioType } from "./models/edificios";
 import Login from "./pages/login";
 import Register from "./pages/register";
+
 
 
 export default function Home() {

@@ -28,6 +28,16 @@ export const actualizarNivelEdificio = async (edificioId: number, nuevoNivel: nu
     return true; // Indicar que la actualización fue exitosa
   } catch (error) {
     console.error("Error al actualizar el nivel del edificio:", error);
-    return false; // Indicar que la actualización falló
+    return false; // Indicar que l  a actualización falló
+  }
+};
+
+export const actualizarTrabajadoresEdificio = async (edificioId: number, nuevosTrabajadores: number): Promise<boolean> => {
+  try {
+    await actualizarEdificio(edificioId, { trabajadores: nuevosTrabajadores });
+    return true;
+  } catch (error) {
+    console.error("Error al actualizar los trabajadores del edificio:", error);
+    return false;
   }
 };

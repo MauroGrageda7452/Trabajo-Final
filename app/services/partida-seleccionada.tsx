@@ -26,7 +26,6 @@ export const fetchSaveEdificios = async (): Promise<EdificioType[] | null> => {
 // Esta función actualiza un edificio en la base de datos
 export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
   try {
-    // Hacer la solicitud para actualizar el edificio en la base de datos (por ejemplo, mediante una API)
     const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
       method: 'PATCH',
       headers: {
@@ -36,15 +35,19 @@ export const actualizarEdificio = async (edificioId: number, newData: Partial<Ed
     });
 
     if (!response.ok) {
-      throw new Error(`Error actualizando el edificio: ${response.statusText}`);
+      const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
+      console.error(errorMessage);
+      throw new Error(errorMessage);
     }
 
-    return true; // Indicar que la actualización fue exitosa
+    const savedData: EdificioType = await response.json();
+    return true;
   } catch (error) {
     console.error("Error al actualizar el edificio:", error);
-    return false; // Indicar que la actualización falló
+    return false;
   }
 };
+
 
 
 

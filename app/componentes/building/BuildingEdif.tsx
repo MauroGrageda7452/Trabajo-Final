@@ -1,53 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { EdificioType } from "@/app/models/edificios";
-import { actualizarNivelEdificio } from "@/app/services/edificios-menu";
+import { actualizarNivelEdificio, actualizarTrabajadoresEdificio } from "@/app/services/edificios-menu";
+import { actualizarRecursoJugador } from "@/app/services/recursos";
 import { NivelBaseUpgrade } from "../Edificios-funcional/base-fun";
 import { calculateTimeForBuildingPozo, calculateAmountForBuildingPozo } from "../Edificios-funcional/pozo-fun"
 import { calculateTimeForBuildingCriadero, calculateAmountForBuildingCriadero } from "../Edificios-funcional/criadero-fun";
 import { calculateTimeForBuildingChatarreria, calculateAmountForBuildingChatarreria } from "../Edificios-funcional/chatarreria-fun";
 import Button from "../ui/Button";
-import { PartidaType } from "@/app/models/partidas";
+import partidas, { PartidaType } from "@/app/models/partidas";
 
 interface Props {
   edificios: EdificioType[];
-  //recursos: PartidaType;
-  //setRecursos: React.Dispatch<React.SetStateAction<PartidaType>> ; 
-  //onRecursosUpdate: (updatedRecursos: PartidaType) => void;
+  recursos: PartidaType["recursos"];
 }
 
-/*
-  falta arreglar el html par que quede bien ubicado y que solo aparezca cuando haces click al edificio y no todos los edificios de una.
-  ------falta que cuando suba de nivel se guarde el nivel en la base de datos.
-  ------falta poner el costo de mejora la cantidad necesaria que necesita de obreros para subir de nivel.
-  falta poner que el costo de mejora de la base sea con recursos y no con obreros
-  falta que se creen obreros en la base y que se guarden en la base de datos.
-  falta poder agregar los obreros en los edificios. (creo que aca voy a necesitar agregar algo en la base de datos pero nose).
-*/
-
-const BuildingEdif: React.FC<Props> = ({ edificios }) => {
+const BuildingEdif: React.FC<Props> = ({ edificios, recursos }) => {
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType | null>(null);
   const [nivel, setNivel] = useState<number>(1);
-  const [recursos, setRecursos] = useState<PartidaType["recursos"] | null>(null);
-  
-
+  //const [recursos, setRecursos] = useState<PartidaType["recursos"] | null>(null);
+  const [trabajadores, setTrabajadores] = useState<number>(0);
+  const [newWorkers, setNewWorkers] = useState<number>(0);
 
   const trabajadoresRequeridosPorNivel = [1, 10, 20];
 
   const handleItemClick = (index: number) => {
-     const edificioSeleccionado = edificios[index];
-     setSelectedBuilding(edificioSeleccionado);
-     setNivel(edificioSeleccionado.nivel || 1);
+    const edificioSeleccionado = edificios[index];
+    setSelectedBuilding(edificioSeleccionado);
+    setNivel(edificioSeleccionado.nivel || 1);
   };
 
   const handleMejorarEdificio = () => {
     if (selectedBuilding && nivel < 3) {
       const nuevoNivel = nivel + 1;
-      if (selectedBuilding.id === 0) {   //  la lógica para mejorar la base
-        // Esto puede incluir la verificación de recursos y llamadas a la función para mejorar la base
-          //NivelBaseUpgrade(recursos, [selectedBuilding], setRecursos, onRecursosUpdate);
+      if (selectedBuilding.id === 0) {
         console.log("Mejorando la base...");
       } else {
-        // Si el edificio seleccionado no es la base, realizas la lógica normal para mejorar otros edificios
         if (selectedBuilding.trabajadores >= trabajadoresRequeridosPorNivel[nuevoNivel - 1]) {
           setNivel(nuevoNivel);
           actualizarNivelEdificio(selectedBuilding.id, nuevoNivel);
@@ -60,7 +47,36 @@ const BuildingEdif: React.FC<Props> = ({ edificios }) => {
     }
   };
 
-  const getIntervalTime = (building: EdificioType, nivel: number): number => { //cantidad de tiempo en el cual tiene dependiendo el nivel
+  const handleAddWorkers = async () => {
+    if (selectedBuilding && recursos && recursos.trabajadores_jugador > 0) {
+      // Calcula la cantidad de nuevos trabajadores del edificio
+      const nuevosTrabajadoresEdificio = selectedBuilding.trabajadores + newWorkers;
+  
+      if (newWorkers <= recursos.trabajadores_jugador) {
+        const nuevosTrabajadoresJugador = recursos.trabajadores_jugador - newWorkers;
+        const successEdificio = await actualizarTrabajadoresEdificio(selectedBuilding.id, nuevosTrabajadoresEdificio);
+        if (successEdificio) {
+          const successRecursos = await actualizarRecursoJugador({ name: 'trabajadores', cantidad: newWorkers });
+          if (successRecursos) {
+            setTrabajadores(nuevosTrabajadoresEdificio);
+            selectedBuilding.trabajadores = nuevosTrabajadoresEdificio;
+            setSelectedBuilding({ ...selectedBuilding });
+          } else {
+            console.error("Error al actualizar los recursos del jugador");
+          }
+        } else {
+          console.error("Error al actualizar el edificio");
+        }
+      } else {
+        console.error("No hay suficientes trabajadores disponibles");
+      }
+    } else {
+      console.error("Recursos insuficientes o edificio no seleccionado");
+    }
+  };
+  
+
+  const getIntervalTime = (building: EdificioType, nivel: number): number => {
     switch (building.name) {
       case 'Pozo':
         return calculateTimeForBuildingPozo(nivel);
@@ -69,11 +85,11 @@ const BuildingEdif: React.FC<Props> = ({ edificios }) => {
       case 'Chatarreria':
         return calculateTimeForBuildingChatarreria(nivel);
       default:
-        return 30000; // Valor por defecto
+        return 30000;
     }
   };
 
-  const getResourceAmount = (building: EdificioType, nivel: number): number => { //cantidad de recurso en el cual genera dependiendo el nivel
+  const getResourceAmount = (building: EdificioType, nivel: number): number => {
     switch (building.name) {
       case 'Pozo':
         return calculateAmountForBuildingPozo(nivel);
@@ -82,50 +98,85 @@ const BuildingEdif: React.FC<Props> = ({ edificios }) => {
       case 'Chatarreria':
         return calculateAmountForBuildingChatarreria(nivel);
       default:
-        return 0; // Valor por defecto
+        return 0;
     }
   };
 
   useEffect(() => {
-    if(selectedBuilding){
+    if (selectedBuilding) {
       const intervalo = getIntervalTime(selectedBuilding, nivel);
       const cantidadRecursoConseguido = getResourceAmount(selectedBuilding, nivel);
-      
-      const intervaloGeneracion = setInterval(async () => {
+
+      const intervaloGeneracion = setInterval(() => {
         console.log(`Generando ${cantidadRecursoConseguido} cada ${intervalo / 1000} segundos`);
       }, intervalo);
-    
+
       return () => clearInterval(intervaloGeneracion);
     }
   }, [selectedBuilding, nivel]);
 
   return (
-    <div className="p-5">
+    <div className="p-10 bg-white shadow-lg rounded-lg">
+      <div className="flex space-x-4">
+        {edificios.map((edificio, index) => (
+          <button
+            key={edificio.id}
+            onClick={() => handleItemClick(index)}
+            className="p-4 bg-blue-500 text-white rounded-lg"
+          >
+            {edificio.name}
+          </button>
+        ))}
+      </div>
       {selectedBuilding && (
-        <div className="mt-5 p-5 bg-black">
-          <h3 className="text-xl font-bold">{selectedBuilding.name}</h3>
-          <p>{selectedBuilding.descripcion}</p>
-          <p>
+        <div className="mt-10 p-10 bg-gray-400 shadow-md rounded-lg">
+          <h3 className="text-2xl text-black font-bold mb-4 ">{selectedBuilding.name}</h3>
+          <p className="text-lg mb-4 text-black">{selectedBuilding.descripcion}</p>
+          <p className="text-lg mb-4 text-black">
             Genera {getResourceAmount(selectedBuilding, nivel)}{" "}
             cada{" "}
             {getIntervalTime(selectedBuilding, nivel) / 1000} segundos
           </p>
           <div className="flex justify-between items-center">
-            <p>
-            Trabajadores requeridos para nivel {nivel + 1}: {trabajadoresRequeridosPorNivel[nivel]}
+            <p className="text-lg text-black">
+              Trabajadores requeridos para nivel {nivel + 1}: {trabajadoresRequeridosPorNivel[nivel]}
             </p>
             {nivel < 3 && (
               <Button
                 onClick={handleMejorarEdificio}
                 text={`Mejorar (Nivel ${nivel + 1})`}
-                className="bg-blue-600"
+                className="bg-blue-600 text-black p-3 rounded-lg hover:bg-blue-700"
               />
             )}
+          </div>
+          <div className="mt-4">
+            <p className="text-lg text-black">
+              Trabajadores actuales: {selectedBuilding.trabajadores}
+            </p>
+            <div className="flex items-center">
+              <button
+                onClick={() => setNewWorkers((prev) => Math.max(prev - 1, 0))}
+                className="p-2 bg-gray-300 rounded-lg"
+              >
+                -
+              </button>
+              <span className="mx-4 text-lg">{newWorkers}</span>
+              <button
+                onClick={() => setNewWorkers((prev) => prev + 1)}
+                className="p-2 bg-gray-300 rounded-lg"
+              >
+                +
+              </button>
+              <Button
+                onClick={handleAddWorkers}
+                text={`Agregar Trabajadores`}
+                className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 ml-4"
+              />
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 };
-
 export default BuildingEdif;
