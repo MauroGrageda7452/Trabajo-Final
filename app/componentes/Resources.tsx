@@ -23,15 +23,17 @@ interface Props {
 
 type ResourcesProps = {
   // items: PartidaType['recursos'] | null;
+  playerId : number
 };
 
 
-const Resources: React.FC = () => {
+const Resources: React.FC<ResourcesProps>= ({playerId}) => {
   // if (!items) {
   //   return <div>Error loading resources</div>;
   // }
-  const {recursosData} = useRecursos();
-
+  
+  const {recursosData} = useRecursos(playerId);
+  
   return (
     <div className="p-4 text-white">
       <div className="flex space-x-4">

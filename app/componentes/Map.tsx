@@ -12,53 +12,56 @@ import { fetchSave } from "../services/partida-seleccionada";
 import { calculateTimeForBuildingCriadero, generarRecursosCriadero } from "./Edificios-funcional/criadero-fun";
 import { calculateTimeForBuildingChatarra, generarRecursosChatarra } from "./Edificios-funcional/chatarreria-fun";
 interface MapProps {
+  partidaJugadorId : number
 }
 
-const Map: React.FC<MapProps> = () => {
+const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   const [showBuildMenu, setShowBuildMenu] = useState(false);
-  const [showConstruir, setShowConstruir] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType>();
   const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
-
+  const [userId, setUserId] = useState <number>(-1);
 
   const queryClient = useQueryClient();
   const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
+  setUserId(partidaJugadorId);
 
 
   const startResourceGeneration = useCallback(async () => {
-    const partida = await fetchSave(1002);
-    if (!partida || !partida.terreno) return;
+      if (userId !== -1) {
+      const partida = await fetchSave(userId);
+        if (!partida || !partida.terreno) return;
 
-    for (const key in partida.terreno) {
-      const edificioId = partida.terreno[key];
-      console.log(edificioId)
-      if (edificioId === 1) {
-        const intervalId = setInterval(async () => {
-          await generarRecursosAgua(1002, 3); // Nivel 3 como ejemplo
-          queryClient.invalidateQueries({ queryKey: ['recursos'] });
-        }, calculateTimeForBuildingPozo(3));
-        intervalRefs.current.push(intervalId);
-      }else if (edificioId === 2 ){
-        const intervalId = setInterval(async () => {
-          await generarRecursosCriadero(1002, 3); // Nivel 3 como ejemplo
-          queryClient.invalidateQueries({ queryKey: ['recursos'] });
-        }, calculateTimeForBuildingCriadero(3));
-        intervalRefs.current.push(intervalId);
-        
-      }else if (edificioId === 3){
-        const intervalId = setInterval(async () => {
-          await generarRecursosChatarra(1002, 3); // Nivel 3 como ejemplo
-          queryClient.invalidateQueries({ queryKey: ['recursos'] });
-        }, calculateTimeForBuildingChatarra(3));
-        intervalRefs.current.push(intervalId);
-      }
+        for (const key in partida.terreno) {
+          const edificioId = partida.terreno[key];
+          //console.log(edificioId)
+          if (edificioId === 1) {
+            const intervalId = setInterval(async () => {
+              await generarRecursosAgua(userId, 3); // Nivel 3 como ejemplo
+              queryClient.invalidateQueries({ queryKey: ['recursos'] });
+            }, calculateTimeForBuildingPozo(3));
+            intervalRefs.current.push(intervalId);
+          }else if (edificioId === 2 ){
+            const intervalId = setInterval(async () => {
+              await generarRecursosCriadero(userId, 3); // Nivel 3 como ejemplo
+              queryClient.invalidateQueries({ queryKey: ['recursos'] });
+            }, calculateTimeForBuildingCriadero(3));
+            intervalRefs.current.push(intervalId);
+            
+          }else if (edificioId === 3){
+            const intervalId = setInterval(async () => {
+              await generarRecursosChatarra(userId, 3); // Nivel 3 como ejemplo
+              queryClient.invalidateQueries({ queryKey: ['recursos'] });
+            }, calculateTimeForBuildingChatarra(3));
+            intervalRefs.current.push(intervalId);
+          }
+        }
     }
+
   }, [queryClient]);
 
   useEffect(() => {
     startResourceGeneration();
-    console.log("hola")
     return () => {
       // Clear all intervals when the component unmounts
       intervalRefs.current.forEach(interval => clearInterval(interval as number));
@@ -77,20 +80,19 @@ const Map: React.FC<MapProps> = () => {
 
   const handleBuiltGroundClick = (index: number) => {
     console.log('ffddyh')
-    setShowBuildMenu(false);
+    //setShowBuildMenu(false);
     setSelectedGround(index);
     setIndiceTerreno(index);
   };
 
+  const hideBuildMenu = () => {
+    setShowBuildMenu(false);
+  }
+
   const handleItemClick = (index: number) => {
     if (edificios) {setSelectedBuilding(edificios[index]);}
-    setShowConstruir(true);
   };
 
-  const handleConstruirClick = (index: number) => {
-    setShowConstruir(false);
-    setShowBuildMenu(false);
-  };
   
 
   
@@ -98,10 +100,10 @@ const Map: React.FC<MapProps> = () => {
     <main>
       <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
         <div className="flex justify-start items-start bg-black">
-          <Resources/> 
+          <Resources playerId={userId}/> 
         </div>
         <div className="flex flex-1 flex-col justify-end items-center relative">
-          <BuildingGrid  onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
+          <BuildingGrid  playerId= {userId} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
           <div className="h-40 w-screen flex relative">
             {/* Imagen de starcraf2 
             <img src="/placeholders/marco-starcraft2-png.png" alt="marco de abajo" className="w-full h-48" /> */}
@@ -109,13 +111,14 @@ const Map: React.FC<MapProps> = () => {
             {showBuildMenu && (
               <div className="absolute top-0 w-full">
                 <div className="w-1/2 ">
-                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={1002}  onItemClick={handleItemClick} />
-                  {showConstruir && (
+                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={userId}  onItemClick={handleItemClick} hideMenu={hideBuildMenu}/>
+                  {/* {showConstruir && (
                     <div className="flex flex-row justify-end items-end">
                       <Button onClick={() => handleConstruirClick(selectedGround || 0)} text={"Construir"} className="bg-green-600 mr-1"/>
                       <Button onClick={() => setShowBuildMenu(false)} text={"Cancelar"} className="bg-red-600 mr-2"/>
                     </div>
-                  )}
+                  )} */}
+                  
                 </div>
               </div>
             )}

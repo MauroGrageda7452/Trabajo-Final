@@ -2,12 +2,12 @@ import { getRecursoList } from "../services/recursos";
 import { useQuery,useMutation, useQueryClient} from "@tanstack/react-query";
 import { actualizarRecursoJugador } from "../services/recursos";
 
-export const useRecursos = () => {
+export const useRecursos = (playerid : number) => {
     const queryClient = useQueryClient()
 
     const { data: recursosData, isLoading: recursosLoading, isError: recursosError } = useQuery({
         queryKey: ['recursos'],
-        queryFn: () => getRecursoList(),
+        queryFn: () => getRecursoList(playerid),
     });
     const actualizarRecursosMutation = useMutation({
         mutationFn: (recurso: { name: string, cantidad: number }) => actualizarRecursoJugador(recurso),

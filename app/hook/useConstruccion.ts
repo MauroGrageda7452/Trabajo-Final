@@ -10,16 +10,16 @@ import { calculateTimeForBuildingChatarra, generarRecursosChatarra } from '../co
 
 
 
-export const useConstruccion = () => {
-  const { recursosData, handleRecursosUpdate } = useRecursos();
-  const { buildingImages, actualizarBuildingMutation } = useBuildingImages();
+export const useConstruccion = (playerid : number) => {
+  const { recursosData, handleRecursosUpdate } = useRecursos(playerid);
+  const { buildingImages, actualizarBuildingMutation } = useBuildingImages(playerid);
   const { edificiosData } = useEdificios();
   const queryClient = useQueryClient();
   const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
 
 
 
-  const handleConstruccion = async (index: number, onItemClick: () => void ) => {
+  const handleConstruccion = async (index: number, onItemClick: () => void, playerid: number ) => {
     if (!edificiosData || !recursosData) return;
 
     const edificioSeleccionado = edificiosData[index];
@@ -27,7 +27,7 @@ export const useConstruccion = () => {
     const { agua_jugador, comida_jugador, chatarra_jugador } = recursosData;
 
     try {
-      const partidaActual = await fetchSave(1002);
+      const partidaActual = await fetchSave(playerid);
       if (!partidaActual) throw new Error('No se encontró la partida del jugador.');
 
       let espacioDisponible = null;
@@ -72,25 +72,25 @@ export const useConstruccion = () => {
         index: parseInt(espacioDisponible, 10)
       });
 
-      //queryClient.invalidateQueries({ queryKey: ['recursos'] });
+      queryClient.invalidateQueries({ queryKey: ['recursos'] });
       queryClient.invalidateQueries({ queryKey: ['buildingImages'] });
       //queryClient.invalidateQueries({ queryKey: ['partida'] });
 
       if (edificioSeleccionado.id === 1) {
         const intervalId = setInterval(async () => {
-          await generarRecursosAgua(1002, 3);
+          await generarRecursosAgua(playerid, 3);
           queryClient.invalidateQueries({ queryKey: ['recursos'] });
         }, calculateTimeForBuildingPozo(3));
         intervalRefs.current.push(intervalId);
       }else if (edificioSeleccionado.id === 2){
         const intervalId = setInterval(async () => {
-          await generarRecursosCriadero(1002, 3);
+          await generarRecursosCriadero(playerid, 3);
           queryClient.invalidateQueries({ queryKey: ['recursos'] });
         }, calculateTimeForBuildingCriadero(3));
         intervalRefs.current.push(intervalId);
       }else if (edificioSeleccionado.id === 3){
         const intervalId = setInterval(async () => {
-          await generarRecursosChatarra(1002, 3);
+          await generarRecursosChatarra(playerid, 3);
           queryClient.invalidateQueries({ queryKey: ['recursos'] });
         }, calculateTimeForBuildingChatarra(3));
         intervalRefs.current.push(intervalId);

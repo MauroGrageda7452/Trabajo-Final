@@ -16,10 +16,11 @@ export const useEdificios = () => {
 };
 
 
-const fetchBuildingsImages = async() => {
+
+const fetchBuildingsImages = async(playerid: number) => {
 
     const edificiosData = await getEdificioList(true);
-    const partida = await fetchSave(1002);
+    const partida = await fetchSave(playerid);
     const terreno = partida?.terreno;
   
     if (terreno && typeof terreno === 'object') {
@@ -38,12 +39,12 @@ const fetchBuildingsImages = async() => {
 
 
 
-export const useBuildingImages = () => {
+export const useBuildingImages = (playerid : number) => {
     const queryClient = useQueryClient();
 
     const {data: buildingImages, isLoading, isError } = useQuery({
         queryKey: ['buildingImages']
-        , queryFn : () => fetchBuildingsImages(),
+        , queryFn : () => fetchBuildingsImages(playerid),
     });
 
     const actualizarBuildingMutation = useMutation({

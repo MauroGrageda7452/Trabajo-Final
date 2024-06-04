@@ -7,11 +7,11 @@ import { useBuildingImages } from "@/app/hook/edficiosConQuery";
 interface Props {
   onEmptyGroundClick: (index: number) => void;
   onBuildGroundClick: (index: number) => void;
+  playerId : number
 }
 
-const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, onBuildGroundClick}) => {
-
-  const buildingImages = useBuildingImages().buildingImages;
+const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, onBuildGroundClick, playerId}) => {
+  const buildingImages = useBuildingImages(playerId).buildingImages
 
   const getImageStyle = (imageUrl: string) => ({
     backgroundImage: `url(${imageUrl})`,

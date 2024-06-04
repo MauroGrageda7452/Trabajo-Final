@@ -7,9 +7,14 @@ import Register from "./pages/register";
 export default function Home() {
   const [showLogin, setShowLogin] = useState(true); // Para agregar a lo nuevo
   const [showRegister, setShowRegister] = useState(false);
-  const [showMap, setShowMap] = useState(true); // este cambio a true
+  const [showMap, setShowMap] = useState(false); // este cambio a true
+  const [userId, setUserId] = useState<number>(-1);
 
-  const handleLogin = () => {
+
+
+  const handleLogin = (userId: string) => {
+    setUserId(Number(userId))
+    //console.log(userId)
     setShowLogin(false);
     setShowRegister(false);
     setShowMap(true);
@@ -24,14 +29,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">  
-      {/* {showLogin && <Login onLogin={handleLogin} onRegister={handleRegister} />} */}
-      {/* {showRegister && <Register onRegister={() => {setShowRegister(false); setShowLogin(true);}} />} */}
-      {/* {showMap && (
-        recursosData && (
-          <Map recursos={recursosData}edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} />
+      {showLogin && <Login onLogin={handleLogin} onRegister={handleRegister} />}
+      {showRegister && <Register onRegister={() => {setShowRegister(false); setShowLogin(true);}} />}
+      {showMap && (
+          <Map partidaJugadorId= {userId}/>
         )
-      )} */}
-        <Map/>
+      } 
+      
       
 
     </main>

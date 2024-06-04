@@ -41,7 +41,7 @@ export const generarRecursosChatarra = async (playerId: number, nivel: number) =
 
     const terreno = partida.terreno;
 
-    partida.recursos.comida_jugador += cantidadRecursoConseguido; // Incrementa el recurso de agua
+    partida.recursos.chatarra_jugador += cantidadRecursoConseguido; // Incrementa el recurso de agua
      
     await updateSave(partida);
   }, intervalo);
