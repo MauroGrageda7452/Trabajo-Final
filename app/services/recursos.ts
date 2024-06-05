@@ -1,29 +1,5 @@
 'use server'
 import { EdificioType } from "../models/edificios";
-// type RecursoType = {
-//   id: number
-//   name: string
-// }
-// const recursoList: Recurso[] = [
-//   { id: 1, name: 'Agua'  },
-//   { id: 2, name: 'Comida' },
-//   { id: 3, name: 'Chatarra' },
-// ]
-
-// export const findRecursoById = async (id: number) => {
-//   return recursoList.find(p => p.id === id)
-// }
-
-// export const findRecursoByName = async (name: string) => {
-//   return recursoList.find(p => p.name === name)
-// }
-
-
-// export const getRecursoList = async (): Promise<Recurso[] > => {
-//     return recursoList  // Devolver la lista
-//   };
-
-  //////////dasdadasd
 import { PartidaType } from "../models/partidas";
 import { fetchSave, updateSave } from "./partida-seleccionada"; 
 

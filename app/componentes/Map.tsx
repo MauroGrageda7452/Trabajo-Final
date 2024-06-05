@@ -74,14 +74,7 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
     setShowMessages(!showMessages);
   };
   
-  // Ejemplo de usuarios (esto debería venir de tus datos reales)
-  const usuariosEjemplo: UsuarioType[] = [
-    { id: 1, username: 'Usuario1', email: 'usuario1@example.com', password: 'password1' },
-    { id: 2, username: 'Usuario2', email: 'usuario2@example.com', password: 'password2' },
-    { id: 3, username: 'Usuario3', email: 'usuario3@example.com', password: 'password3' },
-  ];
 
-  
   return (
     <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
       <div className="flex justify-between items-start bg-black p-1 ">
@@ -98,7 +91,7 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
       {showMessages ? (
-          <BuildingMensajes usuario={usuariosEjemplo} />
+          <BuildingMensajes />
         ) : (
           <BuildingGrid
             edificios={edificios}
