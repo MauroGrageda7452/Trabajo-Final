@@ -11,7 +11,7 @@ import { PartidaType } from "@/app/models/partidas";
 
 interface Props {
   //onItemClick: (index: number) => void;
-  playerId: number; //para identificar al jugador
+  //playerId: number; //para identificar al jugador
   edificios: EdificioType[];
   onRecursosUpdate: (updatedRecursos: { agua_jugador: number; comida_jugador: number; chatarra_jugador: number }) => void;
   indiceTerreno : number;
@@ -21,7 +21,7 @@ interface Props {
   //terrenoBool : Record<string, boolean>;
 }
 
-const BuildingMenu: React.FC<Props> = ({ edificios, playerId, onRecursosUpdate, indiceTerreno, hideMenu, partidaRecursos, partidaJugadorId}) => {
+const BuildingMenu: React.FC<Props> = ({ edificios, /*playerId,*/ onRecursosUpdate, indiceTerreno, hideMenu, partidaRecursos, partidaJugadorId}) => {
   const [edificiosList, setEdificiosList] = useState<EdificioType[]>([]);
   const [recursos, setRecursos] = useState<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number } | null>(null);
   const [showConstruir, setShowConstruir] = useState(false);
@@ -50,7 +50,7 @@ const BuildingMenu: React.FC<Props> = ({ edificios, playerId, onRecursosUpdate, 
     //cargarRecursos();
     setRecursos(partidaRecursos);
     fetchBuildings();
-  }, [playerId]);
+  }, [partidaJugadorId]);
   
   const handleItemClick = async (index: number) => {
     setSelectedItemIndex(index);

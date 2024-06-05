@@ -81,7 +81,7 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
           {showBuildMenu && (
             <div className="absolute top-0 w-full flex justify-center">
               <div className="w-1/2">
-                <BuildingMenu indiceTerreno={indiceTerreno} playerId={1000} edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
+                <BuildingMenu indiceTerreno={indiceTerreno} /*playerId={partida}*/ edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
               </div>
             </div>
           )}
