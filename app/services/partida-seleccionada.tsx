@@ -5,6 +5,7 @@ export const fetchSave = async (userId: number): Promise<PartidaType | null> => 
   try {
     const response = await fetch(`http://localhost:3000/api/saves/${userId}`);
     const data: PartidaType = await response.json()
+    //console.log(data)
     return data;
   } catch (error) {
     console.error("Error fetching partida:", error);
@@ -47,7 +48,7 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
     if (!response.ok) {
       throw new Error(`Error actualizando partida: ${response.statusText}`);
     }
-
+    //console.log(response);
     const savedData: PartidaType = await response.json();
     return savedData;
   } catch (error) {

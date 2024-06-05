@@ -67,7 +67,7 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
 
   useEffect(() => {
     startResourceGeneration();
-    console.log(partidaJugadorId)
+    //console.log(partidaJugadorId)
     return () => {
       // Clear all intervals when the component unmounts
       intervalRefs.current.forEach(interval => clearInterval(interval as number));

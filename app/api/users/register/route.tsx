@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     try {
         const savedUser = await newUser.save();
         const newPartida = new partidas({
-            player_id : newId,
+            id : newId,
             recursos:{
                 agua_jugador: 500,
                 chatarra_jugador : 500,
