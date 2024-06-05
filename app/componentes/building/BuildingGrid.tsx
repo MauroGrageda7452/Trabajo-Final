@@ -1,27 +1,14 @@
 // BuildingGrid.tsx
-import React, { useState, useEffect} from "react";
-import { EdificioType } from "@/app/models/edificios";
-import { fetchSave } from "@/app/services/partida-seleccionada";
-import { PartidaType } from "@/app/models/partidas";
-//import Partidas, { PartidaType } from "@/app/models/partidas";
-//import { getEdificioList } from "../../services/edificios-menu";
-//import baseimage from '../images/placeholders/base_ph.png'
-//import vacioimage from '../../public/placeholders/empty_ground_ph.png'
-//import { StaticImageData } from "next/image";
-
-
+import React from "react";
 
 interface Props {
   onEmptyGroundClick: (index: number) => void;
-  // edificios : EdificioType[];
   onBuildGroundClick: (index: number) => void;
-  // partidaJugadorId: number;
   buildingImages: string[] | null;
-  onBuildingUpdate: (buildingImages: string[]) => void
+  // onBuildingUpdate: (buildingImages: string[]) => void
 }
 
 const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages,onBuildGroundClick}) => {
-
 
   const getImageStyle = (imageUrl: string) => ({
     backgroundImage: `url(${imageUrl})`,
@@ -44,7 +31,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages,onBuil
               onEmptyGroundClick(index);
             }
           }}
-        >{index}</div>
+        ></div>
       ))}
     </div>
   );

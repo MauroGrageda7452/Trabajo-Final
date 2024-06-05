@@ -12,10 +12,12 @@ export const fetchSave = async (userId: number | null): Promise<PartidaType | nu
   }
 };
 
-export const fetchSaveEdificios = async (): Promise<EdificioType[] | null> => {
+export const fetchSaveEdificios = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
     const response = await fetch(`http://localhost:3000/api/buildings`);
     const data: EdificioType[] = await response.json()
+    if (!base) data.shift();
+
     return data;
   } catch (error) {
     console.error("Error fetching Edificios:", error);
@@ -47,5 +49,30 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
   } catch (error) {
     console.error("Error posting partida:", error);
     return null;
+  }
+};
+
+
+export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newData),
+    });
+
+    if (!response.ok) {
+      const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
+      console.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const savedData: EdificioType = await response.json();
+    return true;
+  } catch (error) {
+    console.error("Error al actualizar el edificio:", error);
+    return false;
   }
 };

@@ -5,7 +5,8 @@ export type PartidaType = {
     recursos:{
         agua_jugador: number,
         comida_jugador: number,
-        chatarra_jugador: number
+        chatarra_jugador: number,
+        trabajadores_jugador:number,
     } | null ,
     terreno:{
         //type: Record<string, number>
@@ -19,7 +20,7 @@ const schema = new mongoose.Schema<PartidaType>({
         agua_jugador: Number,
         comida_jugador: Number,
         chatarra_jugador: Number,
-        trabajadores_jugador: Number
+        trabajadores_jugador: Number,
     },
     terreno:{
         type: Map,

@@ -3,15 +3,15 @@
 import React from "react";
 import { PartidaType } from "../models/partidas";
 
-interface Recurso {
-  id: number;
-  name: string;
-  cantidad: number;
-}
+// interface Recurso {
+//   id: number;
+//   name: string;
+//   cantidad: number;
+// }
 
-interface Props {
-  items: Recurso[];
-}
+// interface Props {
+//   items: Recurso[];
+// }
 
 type ResourcesProps = {
   items: PartidaType['recursos'];
@@ -33,6 +33,10 @@ const Resources: React.FC<ResourcesProps> = ({ items }) => {
         <div className="flex items-center space-x-2">
           <span>Chatarra:</span>
           <span>{items?.chatarra_jugador}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span>Trabajadores:</span>
+          <span>{items?.trabajadores_jugador}</span>
         </div>
       </div>
     </div>

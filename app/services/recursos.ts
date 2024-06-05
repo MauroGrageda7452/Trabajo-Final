@@ -4,14 +4,14 @@
 import { PartidaType } from "../models/partidas";
 import { fetchSave, updateSave } from "./partida-seleccionada"; 
 
-export const getRecursoList = async (recursos: PartidaType['recursos']): Promise<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number } | null> => {
+export const getRecursoList = async (recursos: PartidaType['recursos']): Promise<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number, trabajadores_jugador:number } | null> => {
   try {
     if (!recursos) {
       throw new Error('Recursos no disponibles en la partida.');
     }
 
-    const { agua_jugador, comida_jugador, chatarra_jugador }  = recursos;
-    return { agua_jugador, comida_jugador, chatarra_jugador };
+    const { agua_jugador, comida_jugador, chatarra_jugador, trabajadores_jugador }  = recursos;
+    return { agua_jugador, comida_jugador, chatarra_jugador,trabajadores_jugador };
   } catch (error) {
     console.error("Error al obtener los recursos del jugador:", error);
     return null;

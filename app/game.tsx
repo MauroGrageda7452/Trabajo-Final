@@ -8,15 +8,15 @@ import edificios, { EdificioType } from "./models/edificios";
 import { fetchSave } from "./services/partida-seleccionada";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-
+import { generarRecursosAgua } from "./componentes/Edificios-funcional/pozo-fun";
+import { generarRecursosComida } from "./componentes/Edificios-funcional/criadero-fun";
+import { generarRecursosChatarra } from "./componentes/Edificios-funcional/chatarreria-fun";
 const Game: React.FC = () => {
   const [recursosData, setRecursosData] = useState<PartidaType['recursos'] | null>(null);
   const [edificiosData, setEdificiosData] = useState<EdificioType[]>([]);
   const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
   const [buildingImages , setBuildingImages] = useState<string[] | null>(null)
-  //const [terreno, setTerreno] = useState<Record<string, number>>({});
-
 
   useEffect(() => {
     const storedUserId = Cookies.get('userId');
@@ -37,7 +37,7 @@ const Game: React.FC = () => {
         if (saveData) {
           const fetchedRecursos = await getRecursoList(saveData.recursos);
           setRecursosData(fetchedRecursos);
-          const fetchedEdificios = await getEdificioList();
+          const fetchedEdificios = await getEdificioList(true);
           setEdificiosData(fetchedEdificios || []);
           const terreno = saveData.terreno;
           if (terreno && typeof terreno === 'object') {
@@ -48,6 +48,16 @@ const Game: React.FC = () => {
             });
             setBuildingImages(newBuildingImages);
           }
+          if (fetchedEdificios)
+          if (fetchedEdificios[1] && fetchedEdificios[2] && fetchedEdificios[3]){
+            await Promise.all([
+              //console.log(edificios[3].name),
+              generarRecursosAgua(userId, fetchedEdificios[1].nivel),
+              generarRecursosComida(userId, fetchedEdificios[2].nivel),
+              generarRecursosChatarra(userId, fetchedEdificios[3].nivel)
+            ]);
+          }
+
         }
 
       } catch (error) {
@@ -56,24 +66,15 @@ const Game: React.FC = () => {
     };
 
     fetchData();
-    // console.log(buildingImages)
-
-    //console.log(buildingImages)
   }, [userId]);
 
   const handleRecursosUpdate = (updateRecursos: PartidaType['recursos']) => {
     setRecursosData(updateRecursos);
   };
 
-  const handleBuildingImagesUpdate = (buildingImages : string []) => {
-    //console.log(buildingImages)
-    //setBuildingImages(buildingImages);
-    //console.log(buildingImages)
-  }
-
   return (
     <main>
-        <Map recursos={recursosData} buildingImages={buildingImages} onBuildingUpdate={handleBuildingImagesUpdate}edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} />
+        <Map recursos={recursosData} buildingImages={buildingImages} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} />
     </main>
   );
 }

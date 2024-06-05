@@ -1,8 +1,4 @@
-// export default Map;
 import React, { useState } from "react";
-//import { Recurso } from "../services/recursos";
-//import { Edificio } from "../models/edificios";
-//import BuildingMenu from "./building/BuildingMenu";
 import BuildingGrid from "./building/BuildingGrid";
 import Resources from "./Resources";
 import Button from "./ui/Button";
@@ -20,26 +16,28 @@ interface MapProps {
   edificios: EdificioType[] ;
   onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
   partida: number;
-  //terrenoBool:  Record<string, boolean>;
   buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
-  onBuildingUpdate : (buildingImages : string[]) => void;
-
 }
 
-const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecursosUpdate,onBuildingUpdate, partida}) => {
+const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecursosUpdate, partida}) => {
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
   
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
-    //setSelectedGround(index);
     setIndiceTerreno(index);
   };
 
   const handleBuiltGroundClick = (index: number) => {
     console.log('ffddyh')
-    //setSelectedGround(index);
     setIndiceTerreno(index);
+  };
+
+
+  const handleItemClick = (index: number) => {
+    // setShowConstruir(true);
+    // setSelectedBuilding(edificios[index]);
+    // setShowBuildingEdif(true);
   };
 
   const hideBuildMenu = () => {
@@ -53,7 +51,7 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
         <LogoutButton />
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
-        <BuildingGrid buildingImages={buildingImages} onBuildingUpdate={onBuildingUpdate} 
+        <BuildingGrid buildingImages={buildingImages} 
             onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}
             />
         <div className="h-24 w-full bg-ground-color p-4">
@@ -62,7 +60,7 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
             <div className="absolute top-0 w-full flex justify-center">
               <div className="w-1/2">
                 <BuildingMenu buildingImages={buildingImages} indiceTerreno={indiceTerreno} /*playerId={partida}*/
-                onBuildingUpdate={onBuildingUpdate}  edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} 
+                 edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} 
                 partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
               </div>
             </div>
