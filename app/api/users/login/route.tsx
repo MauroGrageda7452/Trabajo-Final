@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     // Buscar el usuario en la base de datos por el nombre de usuario
     const usuario = await Usuarios.findOne({ username});
-    console.log(usuario)
+    //console.log(usuario)
     // const {idPlayer} = await Usuarios.findOne({id});
 
     //console.log(usuario);
@@ -26,13 +26,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
     }
     // fetchSave(usuario.id);
-    const partida = await Partidas.findOne({ player_id: usuario.id });
-    if (!partida){
-        return NextResponse.json({ error: 'Partida incorrecta' }, { status: 404 });
+    // const partida = await Partidas.findOne({ id: usuario.id });
+    // console.log(partida)
+    // if (!partida){
+    //     return NextResponse.json({ error: 'Partida incorrecta' }, { status: 404 });
  
-    }
-    updateSave(partida);
-    // Si la contraseña es válida, retornar el usuario
+    // }
+    // updateSave(partida);
+    // // Si la contraseña es válida, retornar el usuario
     return NextResponse.json({ userId: usuario.id, message: "Login successful" });
 
 

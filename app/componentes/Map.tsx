@@ -11,6 +11,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fetchSave } from "../services/partida-seleccionada";
 import { calculateTimeForBuildingCriadero, generarRecursosCriadero } from "./Edificios-funcional/criadero-fun";
 import { calculateTimeForBuildingChatarra, generarRecursosChatarra } from "./Edificios-funcional/chatarreria-fun";
+// import Link from "next/link";
+import LogoutButton from "./ui/LogoutButton";
 interface MapProps {
   partidaJugadorId : number | null
 }
@@ -27,52 +29,52 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   // }else {
   //setUserId(1004);
   // }
-  const queryClient = useQueryClient();
-  const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
-  //setUserId(1004);
+  // const queryClient = useQueryClient();
+  // const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
+  // //setUserId(1004);
 
 
-  const startResourceGeneration = useCallback(async () => {
-      //if (userId !== null) {
-      const partida = await fetchSave(partidaJugadorId);
-        if (!partida || !partida.terreno) return;
+  // const startResourceGeneration = useCallback(async () => {
+  //     //if (userId !== null) {
+  //     const partida = await fetchSave(partidaJugadorId);
+  //       if (!partida || !partida.terreno) return;
 
-        for (const key in partida.terreno) {
-          const edificioId = partida.terreno[key];
-          //console.log(edificioId)
-          if (edificioId === 1) {
-            const intervalId = setInterval(async () => {
-              await generarRecursosAgua(partidaJugadorId, 3); // Nivel 3 como ejemplo
-              queryClient.invalidateQueries({ queryKey: ['recursos'] });
-            }, calculateTimeForBuildingPozo(3));
-            intervalRefs.current.push(intervalId);
-          }else if (edificioId === 2 ){
-            const intervalId = setInterval(async () => {
-              await generarRecursosCriadero(partidaJugadorId, 3); // Nivel 3 como ejemplo
-              queryClient.invalidateQueries({ queryKey: ['recursos'] });
-            }, calculateTimeForBuildingCriadero(3));
-            intervalRefs.current.push(intervalId);
+  //       for (const key in partida.terreno) {
+  //         const edificioId = partida.terreno[key];
+  //         //console.log(edificioId)
+  //         if (edificioId === 1) {
+  //           const intervalId = setInterval(async () => {
+  //             await generarRecursosAgua(partidaJugadorId, 3); // Nivel 3 como ejemplo
+  //             queryClient.invalidateQueries({ queryKey: ['recursos'] });
+  //           }, calculateTimeForBuildingPozo(3));
+  //           intervalRefs.current.push(intervalId);
+  //         }else if (edificioId === 2 ){
+  //           const intervalId = setInterval(async () => {
+  //             await generarRecursosCriadero(partidaJugadorId, 3); // Nivel 3 como ejemplo
+  //             queryClient.invalidateQueries({ queryKey: ['recursos'] });
+  //           }, calculateTimeForBuildingCriadero(3));
+  //           intervalRefs.current.push(intervalId);
             
-          }else if (edificioId === 3){
-            const intervalId = setInterval(async () => {
-              await generarRecursosChatarra(partidaJugadorId, 3); // Nivel 3 como ejemplo
-              queryClient.invalidateQueries({ queryKey: ['recursos'] });
-            }, calculateTimeForBuildingChatarra(3));
-            intervalRefs.current.push(intervalId);
-          }
+  //         }else if (edificioId === 3){
+  //           const intervalId = setInterval(async () => {
+  //             await generarRecursosChatarra(partidaJugadorId, 3); // Nivel 3 como ejemplo
+  //             queryClient.invalidateQueries({ queryKey: ['recursos'] });
+  //           }, calculateTimeForBuildingChatarra(3));
+  //           intervalRefs.current.push(intervalId);
+  //         }
         
-    }
+  //   }
 
-  }, [queryClient]);
+  // }, [queryClient]);
 
-  useEffect(() => {
-    startResourceGeneration();
-    //console.log(partidaJugadorId)
-    return () => {
-      // Clear all intervals when the component unmounts
-      intervalRefs.current.forEach(interval => clearInterval(interval as number));
-    };
-  }, [startResourceGeneration]);
+  // useEffect(() => {
+  //   startResourceGeneration();
+  //   //console.log(partidaJugadorId)
+  //   return () => {
+  //     // Clear all intervals when the component unmounts
+  //     intervalRefs.current.forEach(interval => clearInterval(interval as number));
+  //   };
+  // }, [startResourceGeneration]);
 
 
   //const edificios = useEdificios().edificiosData;
@@ -105,8 +107,9 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   return (
     <main>
       <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
-        <div className="flex justify-start items-start bg-black">
+        <div className="flex justify-start items-start bg-black p-1">
           <Resources playerId={partidaJugadorId}/> 
+          <LogoutButton/>
         </div>
         <div className="flex flex-1 flex-col justify-end items-center relative">
           <BuildingGrid  playerId= {partidaJugadorId} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
