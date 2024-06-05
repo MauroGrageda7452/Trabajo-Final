@@ -22,7 +22,7 @@ export async function POST(request: Request) {
         timeZoneName: "short"
       });
     // Crear un nuevo documento de mensaje
-    console.log("Formatted Date:", formattedDate);
+    //console.log("Formatted Date:", formattedDate);
     const mensaje = new Mensaje({
       id_sender,
       id_reciever,
@@ -42,3 +42,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Error al guardar el mensaje' }, { status: 500 });
   }
 }
+
+export async function GET(request: Request) {
+    try {
+      // Conectar a la base de datos
+      await connectDB();
+      
+      // Extraer el ID del usuario del que se desean obtener los mensajes
+      const urlParams = new URLSearchParams(request.url.split('?')[1]);
+      const id_reciever = urlParams.get('id_reciever');
+  
+      // Buscar todos los mensajes enviados y recibidos por el usuario
+      const mensajes = await Mensaje.find({ $or: [{ id_sender: id_reciever }, { id_reciever }] });
+  
+      // Enviar los mensajes encontrados como respuesta
+      return NextResponse.json(mensajes);
+  
+    } catch (error) {
+      console.error('Error al obtener los mensajes:', error);
+      // Enviar una respuesta de error al cliente
+      return NextResponse.json({ error: 'Error al obtener los mensajes' }, { status: 500 });
+    }
+  }

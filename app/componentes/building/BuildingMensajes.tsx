@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { UsuarioType } from "@/app/models/usuarios";
 import { getUsuarioList } from "@/app/services/users";
+import PanelIzquierdo from "./Mensajes-UI/LeftPanel";
+import PanelDerecho from "./Mensajes-UI/RightPanel";
 import Cookies from 'js-cookie';
 
 
@@ -14,6 +16,8 @@ const BuildingMensajes: React.FC<Props> = ({  }) => {
   const [messageText, setMessageText] = useState<string>("");
   const [usuarios, setUsuarios] = useState<UsuarioType[] | null>(null);
   const userId = Cookies.get('userId');
+  const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
+
 
   useEffect(() => {
     async function fetchUsuarios() {
@@ -78,38 +82,20 @@ const BuildingMensajes: React.FC<Props> = ({  }) => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Mensajes</h1>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Seleccionar Usuario:</label>
-        <div className="grid grid-cols-3 gap-4">
-          {usuarios && usuarios.map((usuario) => (
-            <div
-              key={usuario.id}
-              onClick={() => handleUserClick(usuario.id)}
-              className={`p-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100`}
-            >
-              {usuario.username}
-            </div>
-          ))}
+    <div>
+      <div className="container mx-auto p-4 grid grid-cols-3 gap-4">
+        <div className="col-span-1">
+          <PanelIzquierdo usuarios={usuarios || []} onUserClick={handleUserClick} />
+        </div>
+        <div className="col-span-2">
+          <PanelDerecho messages={messages} onSendMessage={handleSendMessage} messageText={messageText} setMessageText={setMessageText}  selectedUser={selectedUser} setMessages={setMessages} />
+          <div className="mt-4">
+          </div>
         </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Texto del Mensaje:</label>
-        <textarea
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md text-black"
-        />
-      </div>
-      <button
-        onClick={handleSendMessage}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md"
-      >
-        Enviar Mensaje
-      </button>
     </div>
   );
 };
+
 
 export default BuildingMensajes;
