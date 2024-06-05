@@ -4,11 +4,7 @@ import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-interface LoginProps {
-  onLogin?: (userId: string) => void; // La prop onLogin es opcional ahora
-}
-
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
