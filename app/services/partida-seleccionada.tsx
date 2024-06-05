@@ -1,5 +1,6 @@
 import { EdificioType } from "../models/edificios";
 import partidas, { PartidaType } from "../models/partidas";
+import { UsuarioType } from "../models/usuarios";
 
 export const fetchSave = async (userId: number | null): Promise<PartidaType | null> => {
   try {
@@ -74,5 +75,20 @@ export const actualizarEdificio = async (edificioId: number, newData: Partial<Ed
   } catch (error) {
     console.error("Error al actualizar el edificio:", error);
     return false;
+  }
+};
+
+export const fetchSaveUsuarios = async (): Promise<UsuarioType[] | null> => {
+  try {
+    const response = await fetch('http://localhost:3000/api/users'); // Ruta del endpoint que devuelve la lista de usuarios
+    //console.log(response)
+    if (!response.ok) {
+      throw new Error('Error al obtener la lista de usuarios');
+    }
+    const users = await response.json();
+    return users;
+  } catch (error) {
+    console.error('Error al obtener la lista de usuarios:', error);
+    return null;
   }
 };

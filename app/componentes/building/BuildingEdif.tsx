@@ -129,6 +129,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId,
             {edificio.name}
           </button>
         ))}
+        <Button onClick={() => hideMenu()} text={"X"} className="bg-red-600 ml-20 p-1 px-6 rounded" />
       </div>
       
       {selectedBuilding && (
@@ -175,7 +176,6 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId,
                 text={`Agregar Trabajadores`}
                 className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 ml-4"
               />
-              <Button onClick={() => hideMenu()} text={"Cancelar"} className="bg-red-600 justify-end ml-20 mt-5 p-2 rounded" />
             </div>
           </div>
         </div>
