@@ -31,3 +31,36 @@ body {
     text-wrap: balance;
   }
 }
+
+/* recursos parte superior */
+.horizontal-list-container {
+  display: flex; /* Alinear horizontalmente */
+  gap: 20px; /* Espacio entre cada "nombre : cantidad" */
+}
+
+.list-item {
+  /* Estilo básico para cada elemento */
+  padding: 5px;
+}
+
+.item-text {
+  /* Estilo para texto que contiene nombre y cantidad */
+  white-space: nowrap; /* Evita el salto de línea, todo en una línea */
+  font-family: Arial, sans-serif;
+}
+
+/* botones */
+.button-group-container {
+  display: flex; /* Usa Flexbox para alinear horizontalmente */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  gap: 20px; /* Espacio entre botones */
+  height: 100vh; /* Altura para centrar en toda la pantalla */
+}
+
+.button-item {
+  padding: 10px 20px; /* Espaciado dentro del botón */
+  border: 1px solid gray; /* Borde para visibilidad */
+  background-color: lightgray; /* Color de fondo */
+  cursor: pointer; /* Cambio de cursor al pasar por encima */
+}
