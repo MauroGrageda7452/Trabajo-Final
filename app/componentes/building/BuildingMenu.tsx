@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 
 interface Props {
   onItemClick: (index: number) => void;
-  playerId: number; //para identificar al jugador
+  playerId: number | null; //para identificar al jugador
   // edificios: EdificioType[];
   // onRecursosUpdate: (updatedRecursos: { agua_jugador: number; comida_jugador: number; chatarra_jugador: number }) => void;
   indiceTerreno : number;
@@ -25,6 +25,7 @@ const BuildingMenu: React.FC<Props> = ({onItemClick, playerId, indiceTerreno,hid
   // const { recursosData, recursosLoading, recursosError, handleRecursosUpdate } = useRecursos();
   const { edificiosData, edificiosLoading, edificiosError } = useEdificios();
   //const {buildingImages, actualizarBuildingMutation} = useBuildingImages();
+  if (playerId){ 
   const { handleConstruccion } = useConstruccion(playerId);
   
 
@@ -37,8 +38,9 @@ const BuildingMenu: React.FC<Props> = ({onItemClick, playerId, indiceTerreno,hid
   }
 
   const handleConstruirClick = async (index: number) => {
-    if (terrenoId && playerId)
+    if (terrenoId && playerId){ 
     await handleConstruccion(terrenoId, () => onItemClick(terrenoId), playerId );    
+    }
     setShowConstruir(false);
     setShowBuildMenu(false);
     hideMenu();
@@ -67,6 +69,7 @@ const BuildingMenu: React.FC<Props> = ({onItemClick, playerId, indiceTerreno,hid
         )}
     </div>
   );
+  }
 };
 
 export default BuildingMenu;

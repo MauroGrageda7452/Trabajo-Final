@@ -12,7 +12,7 @@ import { fetchSave } from "../services/partida-seleccionada";
 import { calculateTimeForBuildingCriadero, generarRecursosCriadero } from "./Edificios-funcional/criadero-fun";
 import { calculateTimeForBuildingChatarra, generarRecursosChatarra } from "./Edificios-funcional/chatarreria-fun";
 interface MapProps {
-  partidaJugadorId : number
+  partidaJugadorId : number | null
 }
 
 const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
@@ -20,16 +20,21 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType>();
   const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
-  const [userId, setUserId] = useState <number>(-1);
+  //const [userId, setUserId] = useState <number | null>(1004);
 
+  if (partidaJugadorId !== null){
+  //   setUserId(partidaJugadorId);
+  // }else {
+  //setUserId(1004);
+  // }
   const queryClient = useQueryClient();
   const intervalRefs = useRef<(NodeJS.Timeout | number)[]>([]);
-  setUserId(partidaJugadorId);
+  //setUserId(1004);
 
 
   const startResourceGeneration = useCallback(async () => {
-      if (userId !== -1) {
-      const partida = await fetchSave(userId);
+      //if (userId !== null) {
+      const partida = await fetchSave(partidaJugadorId);
         if (!partida || !partida.terreno) return;
 
         for (const key in partida.terreno) {
@@ -37,31 +42,32 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
           //console.log(edificioId)
           if (edificioId === 1) {
             const intervalId = setInterval(async () => {
-              await generarRecursosAgua(userId, 3); // Nivel 3 como ejemplo
+              await generarRecursosAgua(partidaJugadorId, 3); // Nivel 3 como ejemplo
               queryClient.invalidateQueries({ queryKey: ['recursos'] });
             }, calculateTimeForBuildingPozo(3));
             intervalRefs.current.push(intervalId);
           }else if (edificioId === 2 ){
             const intervalId = setInterval(async () => {
-              await generarRecursosCriadero(userId, 3); // Nivel 3 como ejemplo
+              await generarRecursosCriadero(partidaJugadorId, 3); // Nivel 3 como ejemplo
               queryClient.invalidateQueries({ queryKey: ['recursos'] });
             }, calculateTimeForBuildingCriadero(3));
             intervalRefs.current.push(intervalId);
             
           }else if (edificioId === 3){
             const intervalId = setInterval(async () => {
-              await generarRecursosChatarra(userId, 3); // Nivel 3 como ejemplo
+              await generarRecursosChatarra(partidaJugadorId, 3); // Nivel 3 como ejemplo
               queryClient.invalidateQueries({ queryKey: ['recursos'] });
             }, calculateTimeForBuildingChatarra(3));
             intervalRefs.current.push(intervalId);
           }
-        }
+        
     }
 
   }, [queryClient]);
 
   useEffect(() => {
     startResourceGeneration();
+    console.log(partidaJugadorId)
     return () => {
       // Clear all intervals when the component unmounts
       intervalRefs.current.forEach(interval => clearInterval(interval as number));
@@ -69,7 +75,7 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   }, [startResourceGeneration]);
 
 
-  const edificios = useEdificios().edificiosData;
+  //const edificios = useEdificios().edificiosData;
   
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
@@ -90,7 +96,7 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
   }
 
   const handleItemClick = (index: number) => {
-    if (edificios) {setSelectedBuilding(edificios[index]);}
+    //if (edificios) {setSelectedBuilding(edificios[index]);}
   };
 
   
@@ -100,10 +106,10 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
     <main>
       <div className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')", backgroundPosition: "center top -85px" }}>
         <div className="flex justify-start items-start bg-black">
-          <Resources playerId={userId}/> 
+          <Resources playerId={partidaJugadorId}/> 
         </div>
         <div className="flex flex-1 flex-col justify-end items-center relative">
-          <BuildingGrid  playerId= {userId} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
+          <BuildingGrid  playerId= {partidaJugadorId} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}/> 
           <div className="h-40 w-screen flex relative">
             {/* Imagen de starcraf2 
             <img src="/placeholders/marco-starcraft2-png.png" alt="marco de abajo" className="w-full h-48" /> */}
@@ -111,7 +117,7 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
             {showBuildMenu && (
               <div className="absolute top-0 w-full">
                 <div className="w-1/2 ">
-                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={userId}  onItemClick={handleItemClick} hideMenu={hideBuildMenu}/>
+                  <BuildingMenu  indiceTerreno={indiceTerreno}playerId={partidaJugadorId}  onItemClick={handleItemClick} hideMenu={hideBuildMenu}/>
                   {/* {showConstruir && (
                     <div className="flex flex-row justify-end items-end">
                       <Button onClick={() => handleConstruirClick(selectedGround || 0)} text={"Construir"} className="bg-green-600 mr-1"/>
@@ -127,6 +133,7 @@ const Map: React.FC<MapProps> = ({partidaJugadorId}) => {
       </div>
     </main>
   );
+  }
 };
 
 export default Map;

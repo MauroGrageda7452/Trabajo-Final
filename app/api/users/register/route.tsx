@@ -1,6 +1,7 @@
 import { connectDB } from "@/app/libs/gamedb";
 import partidas from "@/app/models/partidas";
 import Usuarios from "@/app/models/usuarios";
+import {updateSave } from "@/app/services/partida-seleccionada";
 import bcrypt from 'bcrypt';
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { NextResponse } from "next/server";
@@ -21,8 +22,6 @@ export async function POST(request: Request) {
         email: data.email,
         password: hashedPassword
     });
-
-
 
     try {
         const savedUser = await newUser.save();

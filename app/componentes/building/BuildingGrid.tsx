@@ -7,41 +7,44 @@ import { useBuildingImages } from "@/app/hook/edficiosConQuery";
 interface Props {
   onEmptyGroundClick: (index: number) => void;
   onBuildGroundClick: (index: number) => void;
-  playerId : number
+  playerId : number | null
 }
 
 const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, onBuildGroundClick, playerId}) => {
-  const buildingImages = useBuildingImages(playerId).buildingImages
+  if (playerId){
+    const buildingImages = useBuildingImages(playerId).buildingImages
 
-  const getImageStyle = (imageUrl: string) => ({
-    backgroundImage: `url(${imageUrl})`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'center bottom', 
-    backgroundRepeat: 'no-repeat',
-  });
-  return (
-    <div className="flex flex-row">
-      {buildingImages?.map((imageUrl, index) => (
-        <div
-          key={index}
-          style={getImageStyle(imageUrl)}
-          className="h-48 w-48 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-30"
-          onClick={() => {
-            //const key = index.toString();
-            //console.log(terrenoBool[index])
-            if (buildingImages[index] !== '') {
-              //console.log(terrenoBool[key])
-              onBuildGroundClick(index);
-            } else {
-              //console.log(terrenoBool)
-              //onBuildGroundClick(index);
-              onEmptyGroundClick(index);
-            }
-          }}
-        ></div>
-      ))}
-    </div>
-  );
+    const getImageStyle = (imageUrl: string) => ({
+      backgroundImage: `url(${imageUrl})`,
+      backgroundSize: 'contain',
+      backgroundPosition: 'center bottom', 
+      backgroundRepeat: 'no-repeat',
+    });
+    return (
+      <div className="flex flex-row">
+        {buildingImages?.map((imageUrl, index) => (
+          <div
+            key={index}
+            style={getImageStyle(imageUrl)}
+            className="h-48 w-48 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-30"
+            onClick={() => {
+              //const key = index.toString();
+              //console.log(terrenoBool[index])
+              if (buildingImages[index] !== '') {
+                //console.log(terrenoBool[key])
+                onBuildGroundClick(index);
+              } else {
+                //console.log(terrenoBool)
+                //onBuildGroundClick(index);
+                onEmptyGroundClick(index);
+              }
+            }}
+          ></div>
+        ))}
+      </div>
+    );
+  }
+  
 };
 
 export default BuildingGrid;

@@ -23,7 +23,7 @@ interface Props {
 
 type ResourcesProps = {
   // items: PartidaType['recursos'] | null;
-  playerId : number
+  playerId : number | null
 };
 
 
@@ -31,32 +31,35 @@ const Resources: React.FC<ResourcesProps>= ({playerId}) => {
   // if (!items) {
   //   return <div>Error loading resources</div>;
   // }
+  if (playerId){
+    const {recursosData} = useRecursos(playerId);
+    return (
+      <div className="p-4 text-white">
+        <div className="flex space-x-4">
+          <div className="flex items-center space-x-2">
+            <span>Agua:</span>
+            <span>{recursosData?.agua_jugador}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span>Comida:</span>
+            <span>{recursosData?.comida_jugador}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span>Chatarra:</span>
+            <span>{recursosData?.chatarra_jugador}</span>
+          </div>
   
-  const {recursosData} = useRecursos(playerId);
-  
-  return (
-    <div className="p-4 text-white">
-      <div className="flex space-x-4">
-        <div className="flex items-center space-x-2">
-          <span>Agua:</span>
-          <span>{recursosData?.agua_jugador}</span>
+          <div className="flex items-center space-x-2">
+            <span>Trabajadores:</span>
+            <span>{recursosData?.trabajadores_jugador || 0}</span>
+          </div>     
         </div>
-        <div className="flex items-center space-x-2">
-          <span>Comida:</span>
-          <span>{recursosData?.comida_jugador}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span>Chatarra:</span>
-          <span>{recursosData?.chatarra_jugador}</span>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <span>Trabajadores:</span>
-          <span>{recursosData?.trabajadores_jugador || 0}</span>
-        </div>     
       </div>
-    </div>
-  );
+    );
+  }
+  
+  
+
 };
 
 export default Resources;

@@ -51,9 +51,9 @@ export const getRecursoList = async (playerid : number): Promise<{ agua_jugador:
 
 
 // partidad : number
-export const actualizarRecursoJugador = async (recurso: { name: string, cantidad: number }): Promise<PartidaType | null> => {
+export const actualizarRecursoJugador = async (recurso: { name: string, cantidad: number }, playerid : number): Promise<PartidaType | null> => {
   
-  const partidaActual = await fetchSave(1002);
+  const partidaActual = await fetchSave(playerid);
   if (!partidaActual) {
     throw new Error('No se encontró la partida del jugador.');
   }
@@ -64,7 +64,7 @@ export const actualizarRecursoJugador = async (recurso: { name: string, cantidad
   }
 
   if (partidaActual) {
-    let recursoActualizado;
+    // let recursoActualizado;
     switch (recurso.name) {
       case 'agua':
         //recursoActualizado = recursos.agua_jugador - recurso.cantidad;

@@ -10,7 +10,7 @@ export const useRecursos = (playerid : number) => {
         queryFn: () => getRecursoList(playerid),
     });
     const actualizarRecursosMutation = useMutation({
-        mutationFn: (recurso: { name: string, cantidad: number }) => actualizarRecursoJugador(recurso),
+        mutationFn: (recurso: { name: string, cantidad: number }) => actualizarRecursoJugador(recurso,playerid),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey:['recursos']});
         },
