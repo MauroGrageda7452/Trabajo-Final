@@ -13,18 +13,49 @@ import { PartidaType } from "@/app/models/partidas";
 
 interface Props {
   onEmptyGroundClick: (index: number) => void;
-  edificios : EdificioType[];
+  // edificios : EdificioType[];
   onBuildGroundClick: (index: number) => void;
-  partidaJugadorId: number;
+  // partidaJugadorId: number;
   buildingImages: string[] | null;
   onBuildingUpdate: (buildingImages: string[]) => void
 }
 
-const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages, edificios, onBuildGroundClick, partidaJugadorId}) => {
-  const [edificiosPartida, setEdificiosPartida] = useState<EdificioType[]>([]); 
-  const [terreno, setTerreno] = useState<Record<string, number>>({});
-  //const [buildingImages, setBuildingImages] = useState<string[]>([])
-  const [terrenoBool, setTerrenoBool] = useState<Record<string, boolean>>({});
+const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages,onBuildGroundClick}) => {
+
+
+  const getImageStyle = (imageUrl: string) => ({
+    backgroundImage: `url(${imageUrl})`,
+    backgroundSize: 'contain',
+    backgroundPosition: 'center bottom', 
+    backgroundRepeat: 'no-repeat',
+  });
+
+  return (
+    <div className="flex flex-row">
+      {buildingImages?.map((imageUrl, index) => (
+        <div
+          key={index}
+          style={getImageStyle(imageUrl)}
+          className="h-64 w-64 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
+          onClick={() => {
+            if (buildingImages[index] !== '') {
+              onBuildGroundClick(index);
+            } else {
+              onEmptyGroundClick(index);
+            }
+          }}
+        >{index}</div>
+      ))}
+    </div>
+  );
+};
+
+export default BuildingGrid;
+// function onBuildingUpdate(newBuildingImages: string[]) {
+//   throw new Error("Function not implemented.");
+// }
+
+
 
   // useEffect(() => {
   //   const fetchPartidaEdificios = async () => {
@@ -65,41 +96,3 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages, edifi
   //   };
   //   fetchPartidaEdificios();
   // }, [edificios]);
-
-  const getImageStyle = (imageUrl: string) => ({
-    backgroundImage: `url(${imageUrl})`,
-    backgroundSize: 'contain',
-    backgroundPosition: 'center bottom', 
-    backgroundRepeat: 'no-repeat',
-  });
-
-  return (
-    <div className="flex flex-row">
-      {buildingImages?.map((imageUrl, index) => (
-        <div
-          key={index}
-          style={getImageStyle(imageUrl)}
-          className="h-64 w-64 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
-          onClick={() => {
-            //const key = index.toString();
-            //console.log(terrenoBool[index])
-            if (buildingImages[index] !== '') {
-              //console.log(terrenoBool[key])
-              onBuildGroundClick(index);
-            } else {
-              //console.log(terrenoBool)
-              //onBuildGroundClick(index);
-              onEmptyGroundClick(index);
-            }
-          }}
-        >{index}</div>
-      ))}
-    </div>
-  );
-};
-
-export default BuildingGrid;
-// function onBuildingUpdate(newBuildingImages: string[]) {
-//   throw new Error("Function not implemented.");
-// }
-

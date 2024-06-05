@@ -27,10 +27,7 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecursosUpdate,onBuildingUpdate, partida}) => {
-  //const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 3 }, () => ''));
-  //const [buildingImages, setBuildingImages] = useState<string[]>([])
   const [showBuildMenu, setShowBuildMenu] = useState(false);
-  // const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
   
   const handleEmptyGroundClick = (index: number) => {
@@ -49,9 +46,6 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
     setShowBuildMenu(false)
   }
 
-  
-
-  
   return (
     <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
       <div className="flex justify-between items-start bg-black p-1 ">
@@ -60,8 +54,8 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
         <BuildingGrid buildingImages={buildingImages} onBuildingUpdate={onBuildingUpdate} 
-            edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}
-             partidaJugadorId={partida}/>
+            onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}
+            />
         <div className="h-24 w-full bg-ground-color p-4">
           {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
           {showBuildMenu && (
