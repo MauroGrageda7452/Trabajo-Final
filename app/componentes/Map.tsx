@@ -63,7 +63,7 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
         <Resources items={recursos} />
         <button
             onClick={toggleMessages}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-blue-500 text-white mt-2 px-4 py-2 rounded-md"
         >
           Mensajes
         </button>
