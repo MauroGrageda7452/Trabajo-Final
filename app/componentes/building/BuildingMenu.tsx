@@ -38,7 +38,6 @@ const BuildingMenu: React.FC<Props> = ({ edificios,
   const [recursos, setRecursos] = useState<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number,trabajadores_jugador:number } | null>(null);
   const [showConstruir, setShowConstruir] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState<number>(0);
-  const [showBuildingEdif, setShowBuildingEdif] = useState(false);
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -55,7 +54,7 @@ const BuildingMenu: React.FC<Props> = ({ edificios,
   const handleItemClick = async (index: number) => {
     setSelectedItemIndex(index);
     setShowConstruir(true);
-    setShowBuildingEdif(true);
+    //setShowBuildingEdif(true);
   }
 
 
@@ -144,13 +143,8 @@ const handleConstruirClick = async () => {
           <Button onClick={() => handleConstruirClick()} text={"Construir"} className="bg-green-600 mr-1" />
           <Button onClick={() => hideMenu()} text={"Cancelar"} className="bg-red-600 mr-2" />
         </div>
-      )}
-      {/* {showBuildingEdif &&  (
-        <div className="absolute top-0 w-full">
-          <BuildingEdif edificios={edificios} recursos={recursos}   partidaJugadorId={partidaJugadorId}/>
-          </div>
-        )} */}
-    </div>
+      )}   
+      </div>
   );
 };
 

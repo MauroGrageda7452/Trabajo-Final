@@ -12,10 +12,11 @@ import partidas, { PartidaType } from "@/app/models/partidas";
 interface Props {
   edificios: EdificioType[];
   recursos: PartidaType["recursos"];
-  partidaJugadorId:number
+  partidaJugadorId:number;
+  hideMenu: () => void;
 }
 
-const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId}) => {
+const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId, hideMenu}) => {
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType | null>(null);
   const [nivel, setNivel] = useState<number>(1);
   //const [recursos, setRecursos] = useState<PartidaType["recursos"] | null>(null);
@@ -129,6 +130,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId}
           </button>
         ))}
       </div>
+      
       {selectedBuilding && (
         <div className="mt-10 p-10 bg-gray-400 shadow-md rounded-lg">
           <h3 className="text-2xl text-black font-bold mb-4 ">{selectedBuilding.name}</h3>
@@ -146,7 +148,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId}
               <Button
                 onClick={handleMejorarEdificio}
                 text={`Mejorar (Nivel ${nivel + 1})`}
-                className="bg-blue-600 text-black p-3 rounded-lg hover:bg-blue-700"
+                className="bg-blue-600 text-black ml-5 p-3 rounded-lg hover:bg-blue-700"
               />
             )}
           </div>
@@ -157,14 +159,14 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId}
             <div className="flex items-center">
               <button
                 onClick={() => setNewWorkers((prev) => Math.max(prev - 1, 0))}
-                className="p-2 bg-gray-300 rounded-lg"
+                className="p-2 bg-gray-600 rounded-lg"
               >
                 -
               </button>
               <span className="mx-4 text-lg">{newWorkers}</span>
               <button
                 onClick={() => setNewWorkers((prev) => prev + 1)}
-                className="p-2 bg-gray-300 rounded-lg"
+                className="p-2 bg-gray-600 rounded-lg"
               >
                 +
               </button>
@@ -173,6 +175,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , partidaJugadorId}
                 text={`Agregar Trabajadores`}
                 className="bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 ml-4"
               />
+              <Button onClick={() => hideMenu()} text={"Cancelar"} className="bg-red-600 justify-end ml-20 mt-5 p-2 rounded" />
             </div>
           </div>
         </div>
