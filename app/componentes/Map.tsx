@@ -13,7 +13,10 @@ import { EdificioType } from "../models/edificios";
 import BuildingMenu from "./building/BuildingMenu";
 import { actualizarRecursoJugador } from "../services/recursos";
 import Link from "next/link";
-import LogoutButton from "./ui/LogoutButton"
+import LogoutButton from "./ui/LogoutButton";
+import BuildingMensajes from "./building/BuildingMensajes";
+import { UsuarioType } from "../models/usuarios";
+
 
 interface MapProps {
   recursos: PartidaType['recursos'];
@@ -28,6 +31,8 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
+  const [showMessages, setShowMessages] = useState(false); // Estado para controlar la visibilidad de BuildingMensajes
+
   
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
@@ -65,23 +70,55 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
     setShowConstruir(false);
     setShowBuildMenu(false);
   };*/
+  const toggleMessages = () => {
+    setShowMessages(!showMessages);
+  };
   
+  // Ejemplo de usuarios (esto debería venir de tus datos reales)
+  const usuariosEjemplo: UsuarioType[] = [
+    { id: 1, username: 'Usuario1', email: 'usuario1@example.com', password: 'password1' },
+    { id: 2, username: 'Usuario2', email: 'usuario2@example.com', password: 'password2' },
+    { id: 3, username: 'Usuario3', email: 'usuario3@example.com', password: 'password3' },
+  ];
 
   
   return (
     <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
       <div className="flex justify-between items-start bg-black p-1 ">
         <Resources items={recursos} />
-        <LogoutButton />
+        <div className="flex items-center">
+          <button
+            onClick={toggleMessages}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          >
+            Mensajes
+          </button>
+          <LogoutButton />
+        </div>
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
-        <BuildingGrid edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick} partidaJugadorId={partida}/>
+      {showMessages ? (
+          <BuildingMensajes usuario={usuariosEjemplo} />
+        ) : (
+          <BuildingGrid
+            edificios={edificios}
+            onEmptyGroundClick={handleEmptyGroundClick}
+            onBuildGroundClick={handleBuiltGroundClick}
+            partidaJugadorId={partida}
+          />
+        )}
         <div className="h-24 w-full bg-ground-color p-4">
-          {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
           {showBuildMenu && (
             <div className="absolute top-0 w-full flex justify-center">
               <div className="w-1/2">
-                <BuildingMenu indiceTerreno={indiceTerreno} /*playerId={partida}*/ edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
+                <BuildingMenu
+                  indiceTerreno={indiceTerreno}
+                  edificios={edificios}
+                  onRecursosUpdate={onRecursosUpdate}
+                  hideMenu={hideBuildMenu}
+                  partidaRecursos={recursos}
+                  partidaJugadorId={partida}
+                />
               </div>
             </div>
           )}
