@@ -4,7 +4,6 @@ export type MensajeType = {
     id: number;
     id_sender: string;
     id_reciever: string;
-    title: string;
     text: string;
     date: Date;
 }
@@ -13,7 +12,6 @@ const schema = new mongoose.Schema<MensajeType>({
     id: Number,
     id_sender: String,
     id_reciever: String,
-    title: String,
     text: String,
     date: Date
 });
