@@ -16,56 +16,55 @@ interface Props {
   edificios : EdificioType[];
   onBuildGroundClick: (index: number) => void;
   partidaJugadorId: number;
+  buildingImages: string[] | null;
+  onBuildingUpdate: (buildingImages: string[]) => void
 }
 
-const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGroundClick, partidaJugadorId}) => {
+const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages, edificios, onBuildGroundClick, partidaJugadorId}) => {
   const [edificiosPartida, setEdificiosPartida] = useState<EdificioType[]>([]); 
   const [terreno, setTerreno] = useState<Record<string, number>>({});
-  const [buildingImages, setBuildingImages] = useState<string[]>([])
+  //const [buildingImages, setBuildingImages] = useState<string[]>([])
   const [terrenoBool, setTerrenoBool] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    const fetchPartidaEdificios = async () => {
-      try {
-        const data = await fetchSave(partidaJugadorId);
-        const terreno = data?.terreno;
-        if (terreno && typeof terreno === 'object') {
-          setTerreno(terreno);
-          const newBuildingImages = [];
-          //const newTerrenoBool: Record<string, boolean> = {};
-          for (const key in terreno) {
-            if(Object.prototype.hasOwnProperty.call(terreno, key)) {
-              //console.log(key)
-              //console.log(terreno[key])
-              const element = terreno[key];
-              const edificio = edificios.find(edificio => edificio.id === element);
-              if (edificio) {
-                newBuildingImages.push(edificio.imagen);
-                //console.log(newBuildingImages)
-                terrenoBool[key] = true;
-              }else{
-                newBuildingImages.push('');
-                terrenoBool[key] = false;
-              }
-              //console.log(terrenoBool)
-            } 
-          }
-          setBuildingImages(newBuildingImages);
-          setTerrenoBool(terrenoBool);
+  // useEffect(() => {
+  //   const fetchPartidaEdificios = async () => {
+  //     try {
+  //       const data = await fetchSave(partidaJugadorId);
+  //       const terreno = data?.terreno;
+  //       if (terreno && typeof terreno === 'object') {
+  //         setTerreno(terreno);
+  //         const newBuildingImages = [];
+  //         //const newTerrenoBool: Record<string, boolean> = {};
+  //         for (const key in terreno) {
+  //           if(Object.prototype.hasOwnProperty.call(terreno, key)) {
+              
+  //             const element = terreno[key];
+  //             const edificio = edificios.find(edificio => edificio.id === element);
+  //             if (edificio) {
+  //               newBuildingImages.push(edificio.imagen);
+  //               terrenoBool[key] = true;
+  //             }else{
+  //               newBuildingImages.push('');
+  //               terrenoBool[key] = false;
+  //             }
+  //           } 
+  //         }
+  //         onBuildingUpdate(newBuildingImages); // Update the buildingImages state in Map
+  //         setTerrenoBool(terrenoBool);
           
           
-        } else {
-          setTerreno({});
-          setBuildingImages([]);
-          setTerrenoBool({});
-        }       
+  //       } else {
+  //         setTerreno({});
+  //         onBuildingUpdate([]);
+  //         setTerrenoBool({});
+  //       }       
       
-        }catch (error) {
-        console.error("Error al cargar los datos de la partida:", error);
-      }
-    };
-    fetchPartidaEdificios();
-  }, [edificios]);
+  //       }catch (error) {
+  //       console.error("Error al cargar los datos de la partida:", error);
+  //     }
+  //   };
+  //   fetchPartidaEdificios();
+  // }, [edificios]);
 
   const getImageStyle = (imageUrl: string) => ({
     backgroundImage: `url(${imageUrl})`,
@@ -76,7 +75,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
 
   return (
     <div className="flex flex-row">
-      {buildingImages.map((imageUrl, index) => (
+      {buildingImages?.map((imageUrl, index) => (
         <div
           key={index}
           style={getImageStyle(imageUrl)}
@@ -93,10 +92,14 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick, edificios, onBuildGr
               onEmptyGroundClick(index);
             }
           }}
-        ></div>
+        >{index}</div>
       ))}
     </div>
   );
 };
 
 export default BuildingGrid;
+// function onBuildingUpdate(newBuildingImages: string[]) {
+//   throw new Error("Function not implemented.");
+// }
+

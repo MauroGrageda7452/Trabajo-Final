@@ -8,6 +8,6 @@ export async function connectDB() {
     }
 
     await mongoose.connect(mongodbUrl);
-    console.log("MongoDB conectado")
+    // console.log("MongoDB conectado")
 }
  

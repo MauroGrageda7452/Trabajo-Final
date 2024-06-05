@@ -21,30 +21,68 @@ interface MapProps {
   onRecursosUpdate : (updatedRecursos : PartidaType['recursos']) => void;
   partida: number;
   //terrenoBool:  Record<string, boolean>;
+  buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
+  onBuildingUpdate : (buildingImages : string[]) => void;
+
 }
 
-const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida}) => {
-  const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 5 }, () => ''));
+const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecursosUpdate,onBuildingUpdate, partida}) => {
+  //const [buildingImages, setBuildingImages] = useState<string[]>(Array.from({ length: 3 }, () => ''));
+  //const [buildingImages, setBuildingImages] = useState<string[]>([])
   const [showBuildMenu, setShowBuildMenu] = useState(false);
-  const [selectedGround, setSelectedGround] = useState<number>();
+  // const [selectedGround, setSelectedGround] = useState<number>();
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
   
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
-    setSelectedGround(index);
+    //setSelectedGround(index);
     setIndiceTerreno(index);
   };
 
   const handleBuiltGroundClick = (index: number) => {
     console.log('ffddyh')
-    setSelectedGround(index);
+    //setSelectedGround(index);
     setIndiceTerreno(index);
-    
   };
 
   const hideBuildMenu = () => {
     setShowBuildMenu(false)
   }
+
+  
+
+  
+  return (
+    <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
+      <div className="flex justify-between items-start bg-black p-1 ">
+        <Resources items={recursos} />
+        <LogoutButton />
+      </div>
+      <div className="flex flex-1 flex-col justify-end items-center relative">
+        <BuildingGrid buildingImages={buildingImages} onBuildingUpdate={onBuildingUpdate} 
+            edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}
+             partidaJugadorId={partida}/>
+        <div className="h-24 w-full bg-ground-color p-4">
+          {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
+          {showBuildMenu && (
+            <div className="absolute top-0 w-full flex justify-center">
+              <div className="w-1/2">
+                <BuildingMenu buildingImages={buildingImages} indiceTerreno={indiceTerreno} /*playerId={partida}*/
+                onBuildingUpdate={onBuildingUpdate}  edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} 
+                partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Map;
+
+
+
 
   /*const handleItemClick = (index: number) => {
     //setShowConstruir(true);
@@ -65,30 +103,3 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
     setShowConstruir(false);
     setShowBuildMenu(false);
   };*/
-  
-
-  
-  return (
-    <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
-      <div className="flex justify-between items-start bg-black p-1 ">
-        <Resources items={recursos} />
-        <LogoutButton />
-      </div>
-      <div className="flex flex-1 flex-col justify-end items-center relative">
-        <BuildingGrid edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick} partidaJugadorId={partida}/>
-        <div className="h-24 w-full bg-ground-color p-4">
-          {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
-          {showBuildMenu && (
-            <div className="absolute top-0 w-full flex justify-center">
-              <div className="w-1/2">
-                <BuildingMenu indiceTerreno={indiceTerreno} /*playerId={partida}*/ edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
-  );
-};
-
-export default Map;

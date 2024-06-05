@@ -18,14 +18,24 @@ interface Props {
   hideMenu: () => void;
   partidaRecursos: PartidaType['recursos'];
   partidaJugadorId: number;
+  buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
   //terrenoBool : Record<string, boolean>;
+  onBuildingUpdate : (buildingImages : string[]) => void;
+
 }
 
-const BuildingMenu: React.FC<Props> = ({ edificios, /*playerId,*/ onRecursosUpdate, indiceTerreno, hideMenu, partidaRecursos, partidaJugadorId}) => {
+const BuildingMenu: React.FC<Props> = ({ edificios, 
+  /*playerId,*/ onRecursosUpdate,
+   indiceTerreno,
+    hideMenu,
+     partidaRecursos,
+      partidaJugadorId, 
+      buildingImages,
+       onBuildingUpdate}) => {
   const [edificiosList, setEdificiosList] = useState<EdificioType[]>([]);
   const [recursos, setRecursos] = useState<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number } | null>(null);
   const [showConstruir, setShowConstruir] = useState(false);
-  const [selectedItemBuilding, setSelectedItemBuilding] = useState<EdificioType>();
+  // const [selectedItemBuilding, setSelectedItemBuilding] = useState<EdificioType>();
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
   
   useEffect(() => {
@@ -44,7 +54,7 @@ const BuildingMenu: React.FC<Props> = ({ edificios, /*playerId,*/ onRecursosUpda
       const data: EdificioType[] = await response.json();
       data.shift();
       setEdificiosList(data);
-      console.log(data)
+      //console.log(data)
     };
 
     //cargarRecursos();
@@ -55,12 +65,24 @@ const BuildingMenu: React.FC<Props> = ({ edificios, /*playerId,*/ onRecursosUpda
   const handleItemClick = async (index: number) => {
     setSelectedItemIndex(index);
     setShowConstruir(true);
-    setSelectedItemBuilding(edificios[index])
+    // setSelectedItemBuilding(edificios[index])
   }
 
 
 const handleConstruirClick = async (index: number) => {
-  const edificioSeleccionado = edificiosList[index];
+  if ( selectedItemIndex){
+    const edificioSeleccionado = edificiosList[selectedItemIndex];
+  
+  // if (selectedItemIndex !== null) {
+  //   //const updatedBuildingImages = [...buildingImages];
+  //   buildingImages[selectedItemIndex] = edificioSeleccionado.imagen;
+  //   onBuildingUpdate(updatedBuildingImages);
+  // }
+  if (selectedItemIndex !== null && buildingImages) {
+
+    buildingImages[indiceTerreno] = edificioSeleccionado.imagen;
+    onBuildingUpdate(buildingImages);
+  }
   const { agua, comida, chatarra } = edificioSeleccionado.costoRecursoscreacion;
   
   //eleccion de que si o que no
@@ -81,18 +103,8 @@ const handleConstruirClick = async (index: number) => {
   
   try {
     // Verificar si hay suficientes recursos para construir el edificio
-    if (agua_jugador < agua) {
-      console.error("No hay suficiente agua para construir el edificio.");
-      return;
-    }
-
-    if (comida_jugador < comida) {
-      console.error("No hay suficiente comida para construir el edificio.");
-      return;
-    }
-
-    if (chatarra_jugador < chatarra) {
-      console.error("No hay suficiente chatarra para construir el edificio.");
+    if (agua_jugador < agua || comida_jugador < comida || chatarra_jugador < chatarra) {
+      console.error("No hay recursos suficiente para construir el edificio.");
       return;
     }
 
@@ -101,9 +113,8 @@ const handleConstruirClick = async (index: number) => {
         throw new Error('No se encontró la partida del jugador.');
     }
     let i = 0
-    console.log(index)
     for (const key in partidaActual.terreno){
-      if (i == index && partidaActual.terreno[key] === -1 ){
+      if (partidaActual.terreno[key] === -1 ){
         partidaActual.terreno[key] = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
         break;
       }
@@ -136,6 +147,7 @@ const handleConstruirClick = async (index: number) => {
   } catch (error) {
     console.error("Error al crear el edificio:", error);
   }
+}
 };
 
 

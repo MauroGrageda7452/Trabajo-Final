@@ -27,9 +27,9 @@ export const fetchSaveEdificios = async (): Promise<EdificioType[] | null> => {
 
 export const updateSave = async (data: PartidaType): Promise<PartidaType | null> => {
   try {
-    console.log(data)
+    // console.log(data)
     const player_id = data.id
-    console.log(player_id)
+    // console.log(player_id)
     const response = await fetch(`http://localhost:3000/api/saves/${player_id}`, {
       method: 'PATCH',
       headers: {
