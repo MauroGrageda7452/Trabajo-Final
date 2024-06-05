@@ -1,11 +1,8 @@
 'use client'
+import Link from "next/link";
 import React, { useState } from "react";
 
-interface RegisterProps {
-    onRegister: () => void; // Añadimos esta prop para manejar el evento de registro
-}
-
-const Register: React.FC<RegisterProps> = ({ onRegister }) => {
+const Register: React.FC = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,7 +21,7 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
             if (!response.ok) {
                 throw new Error('Failed to register');
             }
-            onRegister(); // Llamamos a la función pasada por prop para cambiar la vista
+            //onRegister(); // Llamamos a la función pasada por prop para cambiar la vista
         } catch (err) {
             setError('Failed to register');
         }
@@ -95,13 +92,15 @@ const Register: React.FC<RegisterProps> = ({ onRegister }) => {
                 </form>
                 <div className="mt-6 text-center">
                     <span className="text-sm text-gray-600">Already have an account?</span>
-                    <button
-                        type="button"
-                        className="ml-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={onRegister}
-                    >
-                        Log in
-                    </button>
+                    <Link href="/login">
+                        <button
+                            type="button"
+                            className="ml-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            //onClick={onRegister}
+                        >
+                            Log in
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

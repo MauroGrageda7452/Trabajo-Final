@@ -12,6 +12,8 @@ import { PartidaType } from "../models/partidas";
 import { EdificioType } from "../models/edificios";
 import BuildingMenu from "./building/BuildingMenu";
 import { actualizarRecursoJugador } from "../services/recursos";
+import Link from "next/link";
+import LogoutButton from "./ui/LogoutButton"
 
 interface MapProps {
   recursos: PartidaType['recursos'];
@@ -68,8 +70,9 @@ const Map: React.FC<MapProps> = ({recursos, edificios, onRecursosUpdate, partida
   
   return (
     <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
-      <div className="flex justify-start items-start bg-black ">
+      <div className="flex justify-between items-start bg-black p-1 ">
         <Resources items={recursos} />
+        <LogoutButton />
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
         <BuildingGrid edificios={edificios} onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick} partidaJugadorId={partida}/>
