@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import BuildingGrid from "./building/BuildingGrid";
 import Resources from "./Resources";
 import Button from "./ui/Button";
@@ -10,7 +10,7 @@ import BuildingMenu from "./building/BuildingMenu";
 import { actualizarRecursoJugador } from "../services/recursos";
 import Link from "next/link";
 import LogoutButton from "./ui/LogoutButton"
-import BuildingEdif from "./building/BuildingEdif";
+// import BuildingEdif from "./building/BuildingEdif";
 import BuildingMensajes from "./building/BuildingMensajes";
 
 interface MapProps {
@@ -88,11 +88,12 @@ const Map: React.FC<MapProps> = ({buildingImages, recursos, edificios, onRecurso
               </div>
             </div>
           )}
-          {showBuildEdif &&(
-          <div className="absolute top-0 w-full flex justify-center mt-5">
-            <BuildingEdif edificios={edificios} recursos={recursos} partidaJugadorId={partida} hideMenu={hideBuildEdif}/>
-          </div>
-          )} 
+          {showBuildEdif //&&(
+          // <div className="absolute top-0 w-full flex justify-center mt-5">
+          //   <BuildingEdif edificios={edificios} recursos={recursos} partidaJugadorId={partida} hideMenu={hideBuildEdif}/>
+          // </div>
+          // )
+          } 
       </div>
     </main>
   );

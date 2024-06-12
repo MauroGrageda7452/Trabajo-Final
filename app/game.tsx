@@ -8,9 +8,9 @@ import edificios, { EdificioType } from "./models/edificios";
 import { fetchSave } from "./services/partida-seleccionada";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-import { generarRecursosAgua } from "./componentes/Edificios-funcional/pozo-fun";
-import { generarRecursosComida } from "./componentes/Edificios-funcional/criadero-fun";
-import { generarRecursosChatarra } from "./componentes/Edificios-funcional/chatarreria-fun";
+import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
+
+
 const Game: React.FC = () => {
   const [recursosData, setRecursosData] = useState<PartidaType['recursos'] | null>(null);
   const [edificiosData, setEdificiosData] = useState<EdificioType[]>([]);
@@ -48,13 +48,9 @@ const Game: React.FC = () => {
             });
             setBuildingImages(newBuildingImages);
           }
-          if (fetchedEdificios)
-          if (fetchedEdificios[1] && fetchedEdificios[2] && fetchedEdificios[3]){
+          if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
             await Promise.all([
-              //console.log(edificios[3].name),
-              generarRecursosAgua(userId, fetchedEdificios[1].nivel),
-              generarRecursosComida(userId, fetchedEdificios[2].nivel),
-              generarRecursosChatarra(userId, fetchedEdificios[3].nivel)
+              generarRecursos(userId, setRecursosData)
             ]);
           }
 
