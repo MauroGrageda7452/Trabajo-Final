@@ -61,9 +61,8 @@ export const generarRecursos = async (playerId: number, handleRecursosUpdate: Fu
       }else if (edificioId === 3){
         partida.recursos['chatarra_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
       }
-      handleRecursosUpdate(partida.recursos);
     }
-
+    handleRecursosUpdate(partida.recursos);
     await updateSave(partida);
 
     // Llama recursivamente a la función después de un intervalo de tiempo
