@@ -20,7 +20,7 @@ export type EdificioType = {
         chatarra: number
     };
     //nivel:number;
-    niveles: { [key: string]: NivelType };
+    niveles: { [key: number]: NivelType };
     // trabajadores: number;
 }
 
@@ -31,7 +31,7 @@ const nivelSchema = new mongoose.Schema({
         chatarra: Number, 
         },
     imagen: String 
-});
+},{_id:false});
 
 
 
@@ -46,7 +46,7 @@ const schema = new mongoose.Schema<EdificioType>({
         chatarra: Number
     },
     //nivel: Number,
-    niveles: { type: Map, of: nivelSchema, required: true }
+    niveles: { type: Map, of: nivelSchema}
     //trabajadores: Number,
 });
 

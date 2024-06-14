@@ -61,17 +61,16 @@ const BuildingMenu: React.FC<Props> = ({ edificios,
 const handleConstruirClick = async () => {
   const edificioSeleccionado = edificiosList[selectedItemIndex];
   if (buildingImages) {
-    buildingImages[indiceTerreno] = edificioSeleccionado.imagen;
+    buildingImages[indiceTerreno] = edificioSeleccionado.niveles[1].imagen;
   }
-  const { agua, comida, chatarra } = edificioSeleccionado.costoRecursoscreacion;
-  
+  const { agua, comida, chatarra } = edificioSeleccionado.niveles[1].costoRecursoscreacion;
 
   const recursosActuales = recursos;
   if (!recursosActuales) {
     console.error("Recursos no cargados");
     return;
   }
-  const { agua_jugador, comida_jugador, chatarra_jugador , trabajadores_jugador} = recursosActuales;
+  const { agua_jugador, comida_jugador, chatarra_jugador} = recursosActuales;
   
   try {
     // Verificar si hay suficientes recursos para construir el edificio
@@ -86,32 +85,44 @@ const handleConstruirClick = async () => {
     }
     let i = 0
     for (const key in partidaActual.terreno){
-      if (partidaActual.terreno[key].edificio_id === -1 ){
-        partidaActual.terreno[key].edificio_id = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
+      if (partidaActual.terreno[key].edificio_id === -1 && partidaActual.recursos){
+          partidaActual.terreno[key].edificio_id = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
+          partidaActual.terreno[key].edificio_nivel = 1;
+          partidaActual.terreno[key].edficio_trabajadores =+ 1;
+          partidaActual.recursos.trabajadores_jugador -=1;
+          partidaActual.recursos.agua_jugador -= agua;
+          partidaActual.recursos.chatarra_jugador -= chatarra;
+          partidaActual.recursos.comida_jugador -= comida;
+
         break;
       }
       i++
     }
-    console.log(partidaActual)
+    // console.log(partidaActual)
+    // partidaActual.recursos?.agua_jugador
+
+
     await updateSave(partidaActual);
 
     // Actualizar los recursos después de la construcción del edificio
-    await Promise.all([
-      actualizarRecursoJugador({ name: "agua", cantidad:  agua }, partidaJugadorId),
-      actualizarRecursoJugador({ name: "comida", cantidad: comida }, partidaJugadorId),
-      actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra }, partidaJugadorId)    
-    ]);
+    // await Promise.all([
+    //   actualizarRecursoJugador({ name: "agua", cantidad:  agua }, partidaJugadorId),
+    //   actualizarRecursoJugador({ name: "comida", cantidad: comida }, partidaJugadorId),
+    //   actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra }, partidaJugadorId)    
+    // ]);
     //console.log(agua_jugador)
+    const trabajadores = partidaActual.recursos?.trabajadores_jugador;
+    if (trabajadores){
+      const recursosActualizados = {
+        agua_jugador : agua_jugador - agua,
+        comida_jugador : comida_jugador - comida,
+        chatarra_jugador : chatarra_jugador - chatarra,
+        trabajadores_jugador : trabajadores,
+     };
     
-    const recursosActualizados = {
-      agua_jugador : agua_jugador - agua,
-      comida_jugador : comida_jugador - comida,
-      chatarra_jugador : chatarra_jugador - chatarra,
-      trabajadores_jugador : trabajadores_jugador,
-    };
-
-    setRecursos(recursosActualizados);
-    onRecursosUpdate(recursosActualizados);
+      setRecursos(recursosActualizados);
+      onRecursosUpdate(recursosActualizados);
+    }
     hideMenu();
     // Recargar los recursos después de la actualización
     //await cargarRecursos();

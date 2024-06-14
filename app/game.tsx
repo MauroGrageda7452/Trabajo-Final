@@ -51,7 +51,14 @@ const Game: React.FC = () => {
             const edificioTerreno = saveData.terreno[key] as EdificioTerrenoType;
             const buildingId = edificioTerreno.edificio_id;
             const edificio = fetchedEdificios?.find(edificio => edificio.id === buildingId);
-            return edificio ? edificio.imagen : '';
+            //console.log(edificio);
+            //console.log(edificio?.niveles);
+            if (edificio && edificio.niveles && edificio.niveles[edificioTerreno.edificio_nivel]) {
+              const imagenEdif = edificio.niveles[edificioTerreno.edificio_nivel].imagen;
+              return imagenEdif ? imagenEdif : '';
+            } else {
+              return '';
+            }
           });
           setBuildingImages(newBuildingImages);
           // }

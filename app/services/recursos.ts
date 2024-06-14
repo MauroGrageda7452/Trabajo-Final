@@ -49,6 +49,7 @@ export const actualizarRecursoJugador = async (recurso: { name: string, cantidad
         if (recursoActualizado < 0) recursoActualizado = 0;
         recursos.chatarra_jugador = recursoActualizado;
         break;
+      //case ''
       default:
         throw new Error('Recurso desconocido.');
     }

@@ -28,7 +28,7 @@ export type PartidaType = {
 
 const edificioTerrenoSchema = new Schema<EdificioTerrenoType>({
     edificio_id: { type: Number, required: true },
-    edificio_nivel: { type: Number, required: true },
+    edificio_nivel: { type: Number, required: false },
     edficio_trabajadores: { type: Number, required: false },
 }, { _id: false });
 
