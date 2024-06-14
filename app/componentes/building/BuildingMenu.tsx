@@ -9,7 +9,7 @@ import { fetchSave, updateSave } from "@/app/services/partida-seleccionada";
 import BuildingGrid from "./BuildingGrid";
 import { PartidaType } from "@/app/models/partidas";
 import { getEdificioList } from "@/app/services/edificios-menu";
-import BuildingEdif from './BuildingEdif';
+// import BuildingEdif from './BuildingEdif';
 
 interface Props {
   //onItemClick: (index: number) => void;
@@ -86,13 +86,13 @@ const handleConstruirClick = async () => {
     }
     let i = 0
     for (const key in partidaActual.terreno){
-      if (partidaActual.terreno[key] === -1 ){
-        partidaActual.terreno[key] = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
+      if (partidaActual.terreno[key].edificio_id === -1 ){
+        partidaActual.terreno[key].edificio_id = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
         break;
       }
       i++
     }
-
+    console.log(partidaActual)
     await updateSave(partidaActual);
 
     // Actualizar los recursos después de la construcción del edificio

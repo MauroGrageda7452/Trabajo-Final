@@ -15,6 +15,6 @@ export async function PATCH(request: Request, { params }: {params: Params}) {
     const { id }= params
     await connectDB()
     const data = await request.json()
-    const partida = await Partidas.updateOne({ id: Number(id) }, {$set: data})
+    const partida = await Partidas.findOneAndUpdate({ id: Number(id) }, {$set: data},{ new: true })
     return NextResponse.json(partida)
 }

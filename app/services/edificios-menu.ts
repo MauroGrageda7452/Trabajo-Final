@@ -22,23 +22,23 @@ export const getEdificioList = async (base:boolean ): Promise<EdificioType[] | n
 
 
 // Esta función actualiza el nivel de un edificio en la base de datos
-export const actualizarNivelEdificio = async (edificioId: number, nuevoNivel: number): Promise<boolean> => {
-  try {
-    // Actualizar el nivel del edificio en la base de datos utilizando la función de partida-seleccionada
-    await actualizarEdificio(edificioId, { nivel: nuevoNivel });
-    return true; // Indicar que la actualización fue exitosa
-  } catch (error) {
-    console.error("Error al actualizar el nivel del edificio:", error);
-    return false; // Indicar que l  a actualización falló
-  }
-};
+// export const actualizarNivelEdificio = async (edificioId: number, nuevoNivel: number): Promise<boolean> => {
+//   try {
+//     // Actualizar el nivel del edificio en la base de datos utilizando la función de partida-seleccionada
+//     await actualizarEdificio(edificioId, { nivel: nuevoNivel });
+//     return true; // Indicar que la actualización fue exitosa
+//   } catch (error) {
+//     console.error("Error al actualizar el nivel del edificio:", error);
+//     return false; // Indicar que l  a actualización falló
+//   }
+// };
 
-export const actualizarTrabajadoresEdificio = async (edificioId: number, nuevosTrabajadores: number): Promise<boolean> => {
-  try {
-    await actualizarEdificio(edificioId, { trabajadores: nuevosTrabajadores });
-    return true;
-  } catch (error) {
-    console.error("Error al actualizar los trabajadores del edificio:", error);
-    return false;
-  }
-};
+// export const actualizarTrabajadoresEdificio = async (edificioId: number, nuevosTrabajadores: number): Promise<boolean> => {
+//   try {
+//     await actualizarEdificio(edificioId, { trabajadores: nuevosTrabajadores });
+//     return true;
+//   } catch (error) {
+//     console.error("Error al actualizar los trabajadores del edificio:", error);
+//     return false;
+//   }
+// };

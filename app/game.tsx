@@ -3,12 +3,12 @@ import React, {useState, useEffect} from "react";
 import Map from "./componentes/Map";
 import { getEdificioList } from "./services/edificios-menu";
 import { getRecursoList } from "./services/recursos";
-import { PartidaType } from "./models/partidas";
+import { EdificioTerrenoType, PartidaType } from "./models/partidas";
 import edificios, { EdificioType } from "./models/edificios";
 import { fetchSave } from "./services/partida-seleccionada";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
+// import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
 
 
 const Game: React.FC = () => {
@@ -17,6 +17,8 @@ const Game: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
   const [buildingImages , setBuildingImages] = useState<string[] | null>(null)
+  //const [terrenoData, setTerrenoData] = useState<PartidaType['terreno'] | null>(null);
+
 
   useEffect(() => {
     const storedUserId = Cookies.get('userId');
@@ -39,19 +41,24 @@ const Game: React.FC = () => {
           setRecursosData(fetchedRecursos);
           const fetchedEdificios = await getEdificioList(true);
           setEdificiosData(fetchedEdificios || []);
-          const terreno = saveData.terreno;
-          if (terreno && typeof terreno === 'object') {
-            const newBuildingImages = Object.keys(terreno).map(key => {
-              const buildingId = terreno[key];
-              const edificio = fetchedEdificios?.find(edificio => edificio.id === buildingId);
-              return edificio ? edificio.imagen : '';
-            });
-            setBuildingImages(newBuildingImages);
-          }
-          if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
-            await Promise.all([
-              generarRecursos(userId, setRecursosData)
-            ]);
+          //console.log(saveData.terreno['pos1']);
+          //setTerrenoData(saveData.terreno);
+          
+          //console.log(saveData.terreno['base'])
+          if (saveData.terreno && typeof saveData.terreno === 'object') {
+            const newBuildingImages = Object.keys(saveData.terreno).map(key => {
+              // Aseguramiento de tipo para saveData.terreno[key]
+            const edificioTerreno = saveData.terreno[key] as EdificioTerrenoType;
+            const buildingId = edificioTerreno.edificio_id;
+            const edificio = fetchedEdificios?.find(edificio => edificio.id === buildingId);
+            return edificio ? edificio.imagen : '';
+          });
+          setBuildingImages(newBuildingImages);
+          // }
+          // if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
+          //   await Promise.all([
+          //     generarRecursos(userId, setRecursosData)
+          //   ]);
           }
 
         }

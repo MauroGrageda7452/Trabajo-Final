@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+export type NivelType = {
+    costoRecursoscreacion: {
+        agua: number,
+        comida: number,
+        chatarra: number
+    }
+    imagen: string;
+};
+
 export type EdificioType = {
     id: number;
     name: string;
@@ -10,9 +19,21 @@ export type EdificioType = {
         comida: number,
         chatarra: number
     };
-    nivel:number;
-    trabajadores: number;
+    //nivel:number;
+    niveles: { [key: string]: NivelType };
+    // trabajadores: number;
 }
+
+const nivelSchema = new mongoose.Schema({
+    costoRecursoscreacion: {
+        agua: Number,
+        comida: Number,
+        chatarra: Number, 
+        },
+    imagen: String 
+});
+
+
 
 const schema = new mongoose.Schema<EdificioType>({
     id: Number,
@@ -24,8 +45,9 @@ const schema = new mongoose.Schema<EdificioType>({
         comida: Number,
         chatarra: Number
     },
-    nivel: Number,
-    trabajadores: Number,
+    //nivel: Number,
+    niveles: { type: Map, of: nivelSchema, required: true }
+    //trabajadores: Number,
 });
 
 export default mongoose.models.Edificios || mongoose.model('Edificios', schema);
