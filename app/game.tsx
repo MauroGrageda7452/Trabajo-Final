@@ -8,7 +8,7 @@ import edificios, { EdificioType } from "./models/edificios";
 import { fetchSave } from "./services/partida-seleccionada";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-// import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
+import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
 
 
 const Game: React.FC = () => {
@@ -61,10 +61,10 @@ const Game: React.FC = () => {
             }
           });
           setBuildingImages(newBuildingImages);
-          // }
-          // if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
+          }
+          if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
           //   await Promise.all([
-          //     generarRecursos(userId, setRecursosData)
+              generarRecursos(userId, setRecursosData)
           //   ]);
           }
 

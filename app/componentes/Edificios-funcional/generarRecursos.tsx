@@ -27,41 +27,108 @@ const calculateAmountForBuilding = (nivel: number): number => {
 };
 
 export const generarRecursos = async (playerId: number, handleRecursosUpdate: Function) => {
-  const intervalo = calculateTimeForBuilding(1);
-  const cantidadRecursoConseguido = calculateAmountForBuilding(1);
-  console.log("Intervalo:", intervalo); // Agrega este console.log para verificar el intervalo
+  const partida = await fetchSave(playerId);
+  if (!partida || !partida.recursos) {
+    console.error('Partida o recursos no encontrados');
+    return;
+  }
 
+  const terreno = partida.terreno;
 
-  const generarRecursosRecursive = async () => {
-    const partida = await fetchSave(playerId);
-    console.log("Función generarRecursosRecursive llamada"); // Agrega este console.log para verificar si se llama a esta función
-
-
-    if (!partida || !partida.recursos) {
-      console.error('Partida o recursos no encontrados');
-      return;
+  // Agrupar edificios por nivel
+  const edificiosPorNivel = Object.keys(terreno).reduce((acc: { [key: number]: number[] }, key) => {
+    const edificio = terreno[key];
+    if (edificio.edificio_id != 0){
+      const nivel = edificio.edificio_nivel;
+      if (!acc[nivel]) acc[nivel] = [];
+      acc[nivel].push(edificio.edificio_id);
+      //console.log(acc);
+      return acc;
+    }else{
+      return [];
     }
+  }, {});
 
-    const terreno = partida.terreno;
+  const actualizarRecursos = async (nivel: number) => {
+    const intervalo = calculateTimeForBuilding(nivel);
+    const cantidadRecursoConseguido = calculateAmountForBuilding(nivel);
 
-    for (const key in terreno) {
-      const edificioId = terreno[key].edificio_id;
-      if (edificioId === 1) {
-        partida.recursos['agua_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
-      }else if (edificioId === 2 ){
-        partida.recursos['comida_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
-      }else if (edificioId === 3){
-        partida.recursos['chatarra_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
+    const actualizar = async () => {
+      const partida = await fetchSave(playerId);
+      if (!partida || !partida.recursos) {
+        console.error('Partida o recursos no encontrados');
+        return;
       }
-    }
-    handleRecursosUpdate(partida.recursos);
-    await updateSave(partida);
 
-    // Llama recursivamente a la función después de un intervalo de tiempo
-    setTimeout(generarRecursosRecursive, intervalo);
+      edificiosPorNivel[nivel].forEach(edificioId => {
+        if (partida.recursos)
+        switch (edificioId) {
+          case 1:
+          
+          partida.recursos['agua_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
+          break;
+          case 2:
+            partida.recursos['comida_jugador'] += cantidadRecursoConseguido;
+            break;
+          case 3:
+            partida.recursos['chatarra_jugador'] += cantidadRecursoConseguido;
+            break;
+          default:
+            console.error('Edificio no reconocido:', edificioId);
+        }
+      });
+
+      handleRecursosUpdate(partida.recursos);
+      await updateSave(partida);
+
+      setTimeout(actualizar, intervalo);
+    };
+
+    setTimeout(actualizar, intervalo);
   };
 
-    // Llama a la función inicialmente para comenzar el proceso de generación de recursos
-    setTimeout(generarRecursosRecursive, intervalo);
+  Object.keys(edificiosPorNivel).forEach(nivel => {
+    actualizarRecursos(Number(nivel));
+  });
+};
+
+
+// export const generarRecursos = async (playerId: number, handleRecursosUpdate: Function) => {
+//   const intervalo = calculateTimeForBuilding(1);
+//   const cantidadRecursoConseguido = calculateAmountForBuilding(1);
+//   console.log("Intervalo:", intervalo); // Agrega este console.log para verificar el intervalo
+
+
+//   const generarRecursosRecursive = async () => {
+//     const partida = await fetchSave(playerId);
+//     console.log("Función generarRecursosRecursive llamada"); // Agrega este console.log para verificar si se llama a esta función
+
+
+//     if (!partida || !partida.recursos) {
+//       console.error('Partida o recursos no encontrados');
+//       return;
+//     }
+
+//     const terreno = partida.terreno;
+
+//     for (const key in terreno) {
+//       const edificioId = terreno[key].edificio_id;
+//       if (edificioId === 1) {
+//         partida.recursos['agua_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
+//       }else if (edificioId === 2 ){
+//         partida.recursos['comida_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
+//       }else if (edificioId === 3){
+//         partida.recursos['chatarra_jugador'] += cantidadRecursoConseguido; // Incrementa el recurso
+//       }
+//     }
+//     handleRecursosUpdate(partida.recursos);
+//     await updateSave(partida);
+
+//     // Llama recursivamente a la función después de un intervalo de tiempo
+//     setTimeout(generarRecursosRecursive, intervalo);
+//   };
+
+//     // Llama a la función inicialmente para comenzar el proceso de generación de recursos
+//     setTimeout(generarRecursosRecursive, intervalo);
     
-  };
+//   };
