@@ -1,7 +1,7 @@
 import { connectDB } from "@/app/libs/gamedb";
 import Usuarios from "@/app/models/usuarios";
 import { NextResponse } from "next/server";
-import bcrypt from 'bcrypt';
+import argon2 from 'argon2';
 
 export async function POST(request: Request) {
     const { username, password } = await request.json(); // Obtener los datos de usuario y contraseña del cuerpo de la solicitud
@@ -15,8 +15,7 @@ export async function POST(request: Request) {
     }
 
     // Comparar la contraseña hasheada almacenada con la contraseña proporcionada por el usuario
-    const validPassword = await bcrypt.compare(password, usuario.password);
-
+    const validPassword = await argon2.verify(usuario.password, password);
     if (!validPassword) {
         return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
     }

@@ -54,29 +54,29 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
 };
 
 
-export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
-  try {
-    const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newData),
-    });
+// export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
+//   try {
+//     const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newData),
+//     });
 
-    if (!response.ok) {
-      const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
-      console.error(errorMessage);
-      throw new Error(errorMessage);
-    }
+//     if (!response.ok) {
+//       const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
+//       console.error(errorMessage);
+//       throw new Error(errorMessage);
+//     }
 
-    const savedData: EdificioType = await response.json();
-    return true;
-  } catch (error) {
-    console.error("Error al actualizar el edificio:", error);
-    return false;
-  }
-};
+//     const savedData: EdificioType = await response.json();
+//     return true;
+//   } catch (error) {
+//     console.error("Error al actualizar el edificio:", error);
+//     return false;
+//   }
+// };
 
 export const fetchSaveUsuarios = async (): Promise<UsuarioType[] | null> => {
   try {

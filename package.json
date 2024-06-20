@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
+    "argon2": "^0.40.3",
     "bcrypt": "^5.1.1",
     "js-cookie": "^3.0.5",
     "mongodb": "^6.6.1",

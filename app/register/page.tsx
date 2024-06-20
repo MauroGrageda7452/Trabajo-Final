@@ -1,17 +1,19 @@
 'use client'
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/users/register', {
+            const response = await fetch('/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -21,6 +23,7 @@ const Register: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Failed to register');
             }
+            router.push('/login')
             //onRegister(); // Llamamos a la función pasada por prop para cambiar la vista
         } catch (err) {
             setError('Failed to register');
@@ -82,14 +85,14 @@ const Register: React.FC = () => {
                     {error && <div className="text-red-500 text-sm">{error}</div>}
 
                     <div>
-                        <Link href="/login">
+                        {/* <Link href="/login"> */}
                         <button
                             type="submit"
                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Register
                         </button>
-                        </Link>
+                        {/* </Link> */}
                     </div>
                 </form>
                 <div className="mt-6 text-center">

@@ -1,6 +1,6 @@
 import { fetchSave, updateSave } from "@/app/services/partida-seleccionada";
 
-const calculateTimeForBuilding = (nivel: number): number => {
+export const calculateTimeForBuilding = (nivel: number): number => {
   switch (nivel) {
     case 1:
       return 30000; // 30 segundos
@@ -13,7 +13,7 @@ const calculateTimeForBuilding = (nivel: number): number => {
   }
 };
 
-const calculateAmountForBuilding = (nivel: number): number => {
+export const calculateAmountForBuilding = (nivel: number): number => {
   switch (nivel) {
     case 1:
       return 25; // Nivel 1
@@ -41,6 +41,7 @@ export const generarRecursos = async (playerId: number, handleRecursosUpdate: Fu
     if (edificio.edificio_id != 0){
       const nivel = edificio.edificio_nivel;
       if (!acc[nivel]) acc[nivel] = [];
+      if (edificio.edificio_id != -1)
       acc[nivel].push(edificio.edificio_id);
       //console.log(acc);
       return acc;

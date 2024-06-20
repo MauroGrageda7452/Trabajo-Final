@@ -17,7 +17,7 @@ const Game: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
   const router = useRouter();
   const [buildingImages , setBuildingImages] = useState<string[] | null>(null)
-  //const [terrenoData, setTerrenoData] = useState<PartidaType['terreno'] | null>(null);
+  const [terrenoData, setTerrenoData] = useState<PartidaType['terreno'] | null>(null);
 
 
   useEffect(() => {
@@ -60,11 +60,12 @@ const Game: React.FC = () => {
               return '';
             }
           });
+          setTerrenoData(saveData.terreno)
           setBuildingImages(newBuildingImages);
           }
           if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
           //   await Promise.all([
-              generarRecursos(userId, setRecursosData)
+              //generarRecursos(userId, setRecursosData)
           //   ]);
           }
 
@@ -84,7 +85,7 @@ const Game: React.FC = () => {
 
   return (
     <main>
-        <Map recursos={recursosData} buildingImages={buildingImages} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} />
+        <Map recursos={recursosData} buildingImages={buildingImages} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} terreno={terrenoData}/>
     </main>
   );
 }
