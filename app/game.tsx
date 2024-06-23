@@ -5,7 +5,7 @@ import { getEdificioList } from "./services/edificios-menu";
 import { getRecursoList } from "./services/recursos";
 import { EdificioTerrenoType, PartidaType } from "./models/partidas";
 import edificios, { EdificioType } from "./models/edificios";
-import { fetchSave } from "./services/partida-seleccionada";
+import { fetchSave, updateSave } from "./services/partida-seleccionada";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { generarRecursos} from "./componentes/Edificios-funcional/generarRecursos";
@@ -61,7 +61,7 @@ const Game: React.FC = () => {
             }
           });
 
-          /* containsEmptyElement = newBuildingImages.includes('');
+          const containsEmptyElement = newBuildingImages.includes('');
           if(!containsEmptyElement){
             newBuildingImages.push('')
             const emptyTerrainKey = `pos${Object.keys(saveData.terreno).length + 1}`;
@@ -70,7 +70,8 @@ const Game: React.FC = () => {
                 edificio_nivel: 0,
                 edficio_trabajadores: 0,
               };
-          }*/
+            await updateSave;
+          }
           setTerrenoData(saveData.terreno)
           setBuildingImages(newBuildingImages);
           }

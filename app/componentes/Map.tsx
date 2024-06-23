@@ -7,6 +7,8 @@ import BuildingMenu from "./building/BuildingMenu";
 import LogoutButton from "./ui/LogoutButton";
 import BuildingEdif from "./building/BuildingEdif";
 import BuildingMensajes from "./building/BuildingMensajes";
+import Button from "./ui/Button";
+import BarContainer from "./ui/BarContainer";
 
 interface MapProps {
   recursos: PartidaType['recursos'];
@@ -65,15 +67,19 @@ const Map: React.FC<MapProps> = ({buildingImages,
 
   return (
     <main className="h-screen w-screen flex flex-col bg-cover" style={{ backgroundImage: "url('/images/background.png')" }}>
-      <div className="flex justify-between items-start bg-black p-1 ">
-        <Resources items={recursos} />
-        <button
-            onClick={toggleMessages}
-            className="bg-blue-500 text-white mt-2 px-4 py-2 rounded-md"
-        >
-          Mensajes
-        </button>
-        <LogoutButton />
+      <div className="flex justify-between">
+        <BarContainer className="flex justify-center items-center w-1/2">
+          <Resources items={recursos} />
+        </BarContainer>
+        {/* <BarContainer className="flex justify-center items-center w-1/3"><span>Juego</span></BarContainer> */}
+        <BarContainer className="flex justify-end w-1/2">
+          <Button
+              onClick={toggleMessages}
+              className=" text-white mt-4 mx-4 px-4 py-2"
+              text="Mensajes"
+          />
+          <LogoutButton />
+        </BarContainer>
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
       {showMessages ? (
