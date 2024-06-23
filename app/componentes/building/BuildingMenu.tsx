@@ -84,8 +84,12 @@ const handleConstruirClick = async () => {
         throw new Error('No se encontró la partida del jugador.');
     }
     let i = 0
+    let construido = false
+    let vacios = 0
     for (const key in partidaActual.terreno){
-      if (partidaActual.terreno[key].edificio_id === -1 && partidaActual.recursos){
+      if (partidaActual.terreno[key].edificio_id === -1 ){
+        vacios++
+        if(!construido && partidaActual.recursos){  
           partidaActual.terreno[key].edificio_id = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
           partidaActual.terreno[key].edificio_nivel = 1;
           partidaActual.terreno[key].edficio_trabajadores =+ 1;
@@ -93,11 +97,22 @@ const handleConstruirClick = async () => {
           partidaActual.recursos.agua_jugador -= agua;
           partidaActual.recursos.chatarra_jugador -= chatarra;
           partidaActual.recursos.comida_jugador -= comida;
-
-        break;
+          construido = true
+          vacios--
+        }
       }
       i++
     }
+    // Si no hay terrenos vacios y menos de 7 edificios construidos 
+    if (vacios === 0 && i < 7) {
+      const nuevoTerrenoKey = `pos${Object.keys(partidaActual.terreno).length}`;
+      partidaActual.terreno[nuevoTerrenoKey] = {
+        edificio_id: -1,
+        edificio_nivel: 0,
+        edficio_trabajadores: 0,
+      };
+    }
+
     // console.log(partidaActual)
     // partidaActual.recursos?.agua_jugador
 
