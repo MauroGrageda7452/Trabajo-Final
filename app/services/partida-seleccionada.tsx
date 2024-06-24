@@ -15,7 +15,7 @@ export const fetchSave = async (userId: number | null): Promise<PartidaType | nu
 
 export const fetchSaveEdificios = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
-    const response = await fetch('https://localhost:3000/api/buildings');
+    const response = await fetch('/api/buildings');
     const data: EdificioType[] = await response.json()
     if (!base) data.shift();
 
