@@ -26,6 +26,20 @@ interface Props {
 
 }
 
+interface ConsoleContainerProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const ConsoleContainer: React.FC<ConsoleContainerProps> = ({ children, className }) => {
+  return <div className={`relative ${className}`}/*style={getImageStyle('/elements/boton.jpg')}*/>
+            <img src='/elements/consola-container.png' className="absolute h-full w-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" alt="center" />
+            <img src='/elements/consola-container -izq.png' className="absolute h-full left-0 top-1/2 transform -translate-y-1/2" alt="left" />
+            <img src='/elements/consola-container -der.png' className="absolute h-full right-0 top-1/2 transform -translate-y-1/2" alt="right" />
+            <span className="relative">{children}</span>
+        </div>;
+};
+
 const BuildingMenu: React.FC<Props> = ({ edificios, 
   /*playerId,*/ onRecursosUpdate,
    indiceTerreno,
@@ -104,14 +118,14 @@ const handleConstruirClick = async () => {
       i++
     }
     // Si no hay terrenos vacios y menos de 7 edificios construidos 
-    if (vacios === 0 && i < 7) {
+    /*if (vacios === 0 && i < 7) {
       const nuevoTerrenoKey = `pos${Object.keys(partidaActual.terreno).length}`;
       partidaActual.terreno[nuevoTerrenoKey] = {
         edificio_id: -1,
         edificio_nivel: 0,
         edficio_trabajadores: 0,
       };
-    }
+    }*/
 
     // console.log(partidaActual)
     // partidaActual.recursos?.agua_jugador
@@ -151,14 +165,14 @@ const handleConstruirClick = async () => {
 
   
   return (
-    <div className="p-5">
+    <ConsoleContainer className="w-auto h-auto p-5">
       {edificiosList.map((edificiosList, index) => (
         <div
           key={edificiosList.id}
-          className={`item-text bg-black cursor-pointer hover:bg-opacity-50 
-          ${ selectedItemIndex === index ? 'bg-blue-500' : 'bg-black'}
+          className={`bg-green-800 text-green-500 cursor-pointer bg-opacity-0 hover:bg-opacity-50 
+          ${selectedItemIndex === index ? 'bg-green-500 bg-opacity-80' : 'bg-green-800'}
           `}
-          onClick={() => handleItemClick(index)} // Aquí llamamos a la función handleItemClick en lugar de onItemClick directamente
+          onClick={() => handleItemClick(index)}
         >
            {`${edificiosList.name} : ${edificiosList.descripcion}`}
 
@@ -166,11 +180,11 @@ const handleConstruirClick = async () => {
       ))}
       {showConstruir && (
         <div className="flex flex-row justify-end items-end mt-2">
-          <Button onClick={() => handleConstruirClick()} text={"Construir"} className="bg-green-600 mr-1" />
-          <Button onClick={() => hideMenu()} text={"Cancelar"} className="bg-red-600 mr-2" />
+          <Button onClick={() => handleConstruirClick()} text={"Construir"} className="mr-1 p-2 text-gray-900" />
+          <Button onClick={() => hideMenu()} text={"Cancelar"} className="mr-2 p-2 text-gray-900" />
         </div>
       )}   
-      </div>
+      </ConsoleContainer>
   );
 };
 

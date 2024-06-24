@@ -72,43 +72,59 @@ const Map: React.FC<MapProps> = ({buildingImages,
           <Resources items={recursos} />
         </BarContainer>
         {/* <BarContainer className="flex justify-center items-center w-1/3"><span>Juego</span></BarContainer> */}
-        <BarContainer className="flex justify-end w-1/2">
+        <BarContainer className="flex justify-end items-center w-1/2">
+          <div className="flex flex-row w-full">
+          <img src="/elements/titulo.png" className="h-10" />
           <Button
-              onClick={toggleMessages}
-              className=" text-white mt-4 mx-4 px-4 py-2"
-              text="Mensajes"
+            onClick={toggleMessages}
+            className="text-gray-900 font-black mx-4 p-2"
+            text="Mensajes"
           />
           <LogoutButton />
+          </div>
         </BarContainer>
       </div>
       <div className="flex flex-1 flex-col justify-end items-center relative">
-      {showMessages ? (
+        {showMessages ? (
           <BuildingMensajes />
         ) : (
-          <BuildingGrid buildingImages={buildingImages} 
-            onEmptyGroundClick={handleEmptyGroundClick} onBuildGroundClick={handleBuiltGroundClick}
-            />
+          <BuildingGrid 
+            buildingImages={buildingImages} 
+            onEmptyGroundClick={handleEmptyGroundClick} 
+            onBuildGroundClick={handleBuiltGroundClick} 
+          />
         )}
         <div className="h-24 w-full bg-ground-color p-4"></div>
-          {/* Contenedor de la imagen y la parte superior de BuildingMenu */}
-          {showBuildMenu && (
-            <div className="absolute top-0 w-full flex justify-center mt-5">
-              <div className="w-1/2">
-                <BuildingMenu buildingImages={buildingImages} indiceTerreno={indiceTerreno} /*playerId={partida}*/
-                 edificios={edificios} onRecursosUpdate={onRecursosUpdate} hideMenu={hideBuildMenu} 
-                partidaRecursos={recursos} partidaJugadorId={partida}/*onItemClick={handleItemClick} *//> 
-              </div>
-            </div>
-          )}
-          {showBuildEdif &&(
+        {showBuildMenu && (
           <div className="absolute top-0 w-full flex justify-center mt-5">
-            <BuildingEdif indiceTerreno={indiceTerreno}terreno={terreno}edificios={edificios} recursos={recursos} partidaJugadorId={partida} hideMenu={hideBuildEdif}/>
+            <div className="w-1/2">
+              <BuildingMenu 
+                buildingImages={buildingImages} 
+                indiceTerreno={indiceTerreno}
+                edificios={edificios} 
+                onRecursosUpdate={onRecursosUpdate} 
+                hideMenu={hideBuildMenu} 
+                partidaRecursos={recursos} 
+                partidaJugadorId={partida}
+              />
+            </div>
           </div>
-            )
-          } 
+        )}
+        {showBuildEdif && (
+          <div className="absolute top-0 w-full flex justify-center mt-5">
+            <BuildingEdif 
+              indiceTerreno={indiceTerreno}
+              terreno={terreno}
+              edificios={edificios} 
+              recursos={recursos} 
+              partidaJugadorId={partida} 
+              hideMenu={hideBuildEdif} 
+            />
+          </div>
+        )}
       </div>
     </main>
-  );
+  );  
 };
 
 export default Map;

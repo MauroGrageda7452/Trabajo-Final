@@ -61,17 +61,17 @@ const Game: React.FC = () => {
             }
           });
 
-          const containsEmptyElement = newBuildingImages.includes('');
-          if(!containsEmptyElement){
-            newBuildingImages.push('')
-            const emptyTerrainKey = `pos${Object.keys(saveData.terreno).length + 1}`;
-              saveData.terreno[emptyTerrainKey] = {
-                edificio_id: -1,
-                edificio_nivel: 0,
-                edficio_trabajadores: 0,
-              };
-            await updateSave;
-          }
+          // const containsEmptyElement = newBuildingImages.includes('');
+          // if(!containsEmptyElement){
+          //   newBuildingImages.push('')
+          //   const emptyTerrainKey = `pos${Object.keys(saveData.terreno).length + 1}`;
+          //     saveData.terreno[emptyTerrainKey] = {
+          //       edificio_id: -1,
+          //       edificio_nivel: 0,
+          //       edficio_trabajadores: 0,
+          //     };
+          //   await updateSave;
+          // }
           setTerrenoData(saveData.terreno)
           setBuildingImages(newBuildingImages);
           }
