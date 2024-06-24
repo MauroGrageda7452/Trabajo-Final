@@ -119,6 +119,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
               recursos={recursos} 
               partidaJugadorId={partida} 
               hideMenu={hideBuildEdif} 
+              buildingImages={buildingImages}
             />
           </div>
         )}
