@@ -85,7 +85,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
           <Button
             onClick={toggleMessages}
             className="text-gray-900 font-black mx-4 p-2"
-            text="Mensajes"
+            text="Mensajerías"
           />
           <LogoutButton />
           </div>
