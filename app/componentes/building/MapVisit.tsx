@@ -18,21 +18,20 @@ const MapVisit: React.FC<Props> = ({buildingImages, hideMap}) => {
 
   return (
     <div>
-    <Button onClick={() => hideMap()} text={"X"} className="bg-red-600 ml-20 p-1 px-6 rounded" />
-    <div className="bg-contain bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/background.png')" }}>
-    <div className="flex flex-row justify-end items-end relative" >
-        {buildingImages?.map((imageUrl, index) => (
-          <div
-            key={index}
-            style={getImageStyle(imageUrl)}
-            className="h-48 w-48 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
-          ></div>
-        ))}
+      <div className="bg-contain bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/background.png')", height: '750%' }}>
+        <div className="flex flex-row justify-end items-end relative">
+            {buildingImages?.map((imageUrl, index) => (
+                <div
+                    key={index}
+                    style={getImageStyle(imageUrl)}
+                    className="h-64 w-64 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20 m-2"
+                ></div>
+                ))}
+            </div>
         </div>
-    </div>
+      <Button onClick={() => hideMap()} text={"X"} className="bg-red-600 ml-1 p-1 px-6 rounded" />
     </div>
   );
-
 };
 
 export default MapVisit;

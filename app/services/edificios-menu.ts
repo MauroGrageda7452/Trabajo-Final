@@ -2,7 +2,7 @@
 import {EdificioType} from "../models/edificios";
 import { fetchSave } from "./partida-seleccionada";
 // import { PartidaType } from "../models/partidas";
-import {fetchSaveEdificios} from "./partida-seleccionada"; 
+import { fetchSaveEdificios } from "./partida-seleccionada"; 
 //import { actualizarEdificio } from "./partida-seleccionada";
 
 
