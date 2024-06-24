@@ -23,7 +23,7 @@ const BuildingGrid: React.FC<Props> = ({onEmptyGroundClick,buildingImages,onBuil
         <div
           key={index}
           style={getImageStyle(imageUrl)}
-          className="h-64 w-64 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
+          className=" h-72 w-72 bg-white bg-cover bg-opacity-0 cursor-pointer hover:bg-opacity-20"
           onClick={() => {
             if (buildingImages[index] !== '') {
               onBuildGroundClick(index);

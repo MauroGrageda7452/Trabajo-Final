@@ -4,7 +4,7 @@ import { UsuarioType } from "../models/usuarios";
 
 export const fetchSave = async (userId: number | null): Promise<PartidaType | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/saves/${userId}`);
+    const response = await fetch(`/api/saves/${userId}`);
     const data: PartidaType = await response.json()
     return data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const fetchSave = async (userId: number | null): Promise<PartidaType | nu
 
 export const fetchSaveEdificios = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/buildings`);
+    const response = await fetch('/api/buildings');
     const data: EdificioType[] = await response.json()
     if (!base) data.shift();
 
@@ -33,7 +33,7 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
     // console.log(data)
     const player_id = data.id
     // console.log(player_id)
-    const response = await fetch(`http://localhost:3000/api/saves/${player_id}`, {
+    const response = await fetch(`/api/saves/${player_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -54,33 +54,33 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
 };
 
 
-export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
-  try {
-    const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newData),
-    });
+// export const actualizarEdificio = async (edificioId: number, newData: Partial<EdificioType>): Promise<boolean> => {
+//   try {
+//     const response = await fetch(`http://localhost:3000/api/buildings/${edificioId}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(newData),
+//     });
 
-    if (!response.ok) {
-      const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
-      console.error(errorMessage);
-      throw new Error(errorMessage);
-    }
+//     if (!response.ok) {
+//       const errorMessage = `Error al actualizar el edificio: ${response.statusText}`;
+//       console.error(errorMessage);
+//       throw new Error(errorMessage);
+//     }
 
-    const savedData: EdificioType = await response.json();
-    return true;
-  } catch (error) {
-    console.error("Error al actualizar el edificio:", error);
-    return false;
-  }
-};
+//     const savedData: EdificioType = await response.json();
+//     return true;
+//   } catch (error) {
+//     console.error("Error al actualizar el edificio:", error);
+//     return false;
+//   }
+// };
 
 export const fetchSaveUsuarios = async (): Promise<UsuarioType[] | null> => {
   try {
-    const response = await fetch('http://localhost:3000/api/users'); // Ruta del endpoint que devuelve la lista de usuarios
+    const response = await fetch('/api/users'); // Ruta del endpoint que devuelve la lista de usuarios
     //console.log(response)
     if (!response.ok) {
       throw new Error('Error al obtener la lista de usuarios');

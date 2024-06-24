@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-//import { Edificios_menu } from "../../services/edificios-menu";
-import { actualizarRecursoJugador, getRecursoList } from "../../services/recursos";
-//import { connectDB } from "@/app/libs/gamedb";
-import Edificios, { EdificioType } from "../../models/edificios";
-//import { PartidaType } from "@/app/models/partidas";
+import { EdificioType } from "../../models/edificios";
 import Button from "../ui/Button";
 import { fetchSave, updateSave } from "@/app/services/partida-seleccionada";
-import BuildingGrid from "./BuildingGrid";
 import { PartidaType } from "@/app/models/partidas";
 import { getEdificioList } from "@/app/services/edificios-menu";
-import BuildingEdif from './BuildingEdif';
+import ConsoleContainer from "../ui/ConsoleContainer";
 
 interface Props {
-  //onItemClick: (index: number) => void;
-  //playerId: number; //para identificar al jugador
   edificios: EdificioType[];
   onRecursosUpdate: (updatedRecursos: { agua_jugador: number; comida_jugador: number; chatarra_jugador: number; trabajadores_jugador:number; }) => void;
   indiceTerreno : number;
@@ -21,18 +14,17 @@ interface Props {
   partidaRecursos: PartidaType['recursos'];
   partidaJugadorId: number;
   buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
-  //terrenoBool : Record<string, boolean>;
-  // onBuildingUpdate : (buildingImages : string[]) => void;
-
+  onTerrenoUpdate : (updateTerreno : PartidaType['terreno']) => void;
 }
 
 const BuildingMenu: React.FC<Props> = ({ edificios, 
-  /*playerId,*/ onRecursosUpdate,
+  onRecursosUpdate,
    indiceTerreno,
     hideMenu,
      partidaRecursos,
       partidaJugadorId, 
       buildingImages,
+      onTerrenoUpdate
       }) => {
   const [edificiosList, setEdificiosList] = useState<EdificioType[]>([]);
   const [recursos, setRecursos] = useState<{ agua_jugador: number, comida_jugador: number, chatarra_jugador: number,trabajadores_jugador:number } | null>(null);
@@ -60,22 +52,18 @@ const BuildingMenu: React.FC<Props> = ({ edificios,
 
 const handleConstruirClick = async () => {
   const edificioSeleccionado = edificiosList[selectedItemIndex];
-  if (buildingImages) {
-    buildingImages[indiceTerreno] = edificioSeleccionado.imagen;
-  }
-  const { agua, comida, chatarra } = edificioSeleccionado.costoRecursoscreacion;
-  
+  const { agua, comida, chatarra } = edificioSeleccionado.niveles[1].costoRecursoscreacion;
 
   const recursosActuales = recursos;
   if (!recursosActuales) {
     console.error("Recursos no cargados");
     return;
   }
-  const { agua_jugador, comida_jugador, chatarra_jugador , trabajadores_jugador} = recursosActuales;
+  const { agua_jugador, comida_jugador, chatarra_jugador, trabajadores_jugador} = recursosActuales;
   
   try {
     // Verificar si hay suficientes recursos para construir el edificio
-    if (agua_jugador < agua || comida_jugador < comida || chatarra_jugador < chatarra) {
+    if (agua_jugador < agua || comida_jugador < comida || chatarra_jugador < chatarra || trabajadores_jugador <= 0) {
       console.error("No hay recursos suficiente para construir el edificio.");
       return;
     }
@@ -84,34 +72,52 @@ const handleConstruirClick = async () => {
     if (!partidaActual) {
         throw new Error('No se encontró la partida del jugador.');
     }
-    let i = 0
+    //let i = 0
+    //let construido = false
+    //let vacios = 0
     for (const key in partidaActual.terreno){
-      if (partidaActual.terreno[key] === -1 ){
-        partidaActual.terreno[key] = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
-        break;
+      if (partidaActual.terreno[key].edificio_id === -1 ){
+        //vacios++
+        if(partidaActual.recursos){  
+          partidaActual.terreno[key].edificio_id = edificioSeleccionado.id; // Reemplaza -1 con el ID del edificio seleccionado
+          partidaActual.terreno[key].edificio_nivel = 1;
+          partidaActual.terreno[key].edficio_trabajadores =+ 1;
+          partidaActual.recursos.trabajadores_jugador -=1;
+          partidaActual.recursos.agua_jugador -= agua;
+          partidaActual.recursos.chatarra_jugador -= chatarra;
+          partidaActual.recursos.comida_jugador -= comida;
+          //construido = true
+          //vacios--
+        }
       }
-      i++
+    }
+
+    if (buildingImages) {
+      buildingImages[indiceTerreno] = edificioSeleccionado.niveles[1].imagen;
     }
 
     await updateSave(partidaActual);
 
     // Actualizar los recursos después de la construcción del edificio
-    await Promise.all([
-      actualizarRecursoJugador({ name: "agua", cantidad:  agua }, partidaJugadorId),
-      actualizarRecursoJugador({ name: "comida", cantidad: comida }, partidaJugadorId),
-      actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra }, partidaJugadorId)    
-    ]);
+    // await Promise.all([
+    //   actualizarRecursoJugador({ name: "agua", cantidad:  agua }, partidaJugadorId),
+    //   actualizarRecursoJugador({ name: "comida", cantidad: comida }, partidaJugadorId),
+    //   actualizarRecursoJugador({ name: "chatarra", cantidad: chatarra }, partidaJugadorId)    
+    // ]);
     //console.log(agua_jugador)
+    const trabajadores = partidaActual.recursos?.trabajadores_jugador;
+    if (trabajadores){
+      const recursosActualizados = {
+        agua_jugador : agua_jugador - agua,
+        comida_jugador : comida_jugador - comida,
+        chatarra_jugador : chatarra_jugador - chatarra,
+        trabajadores_jugador : trabajadores,
+     };
     
-    const recursosActualizados = {
-      agua_jugador : agua_jugador - agua,
-      comida_jugador : comida_jugador - comida,
-      chatarra_jugador : chatarra_jugador - chatarra,
-      trabajadores_jugador : trabajadores_jugador,
-    };
-
-    setRecursos(recursosActualizados);
-    onRecursosUpdate(recursosActualizados);
+      setRecursos(recursosActualizados);
+      onRecursosUpdate(recursosActualizados);
+    }
+    onTerrenoUpdate(partidaActual.terreno);
     hideMenu();
     // Recargar los recursos después de la actualización
     //await cargarRecursos();
@@ -125,14 +131,14 @@ const handleConstruirClick = async () => {
 
   
   return (
-    <div className="p-5">
+    <ConsoleContainer className="w-auto h-auto p-5">
       {edificiosList.map((edificiosList, index) => (
         <div
           key={edificiosList.id}
-          className={`item-text bg-black cursor-pointer hover:bg-opacity-50 
-          ${ selectedItemIndex === index ? 'bg-blue-500' : 'bg-black'}
+          className={`bg-green-800 text-green-500 cursor-pointer bg-opacity-0 hover:bg-opacity-50 
+          ${selectedItemIndex === index ? 'bg-green-500 bg-opacity-80' : 'bg-green-800'}
           `}
-          onClick={() => handleItemClick(index)} // Aquí llamamos a la función handleItemClick en lugar de onItemClick directamente
+          onClick={() => handleItemClick(index)}
         >
            {`${edificiosList.name} : ${edificiosList.descripcion}`}
 
@@ -140,11 +146,11 @@ const handleConstruirClick = async () => {
       ))}
       {showConstruir && (
         <div className="flex flex-row justify-end items-end mt-2">
-          <Button onClick={() => handleConstruirClick()} text={"Construir"} className="bg-green-600 mr-1" />
-          <Button onClick={() => hideMenu()} text={"Cancelar"} className="bg-red-600 mr-2" />
+          <Button onClick={() => handleConstruirClick()} text={"Construir"} className="mr-1 p-2 text-gray-900" />
+          <Button onClick={() => hideMenu()} text={"Cancelar"} className="mr-2 p-2 text-gray-900" />
         </div>
       )}   
-      </div>
+      </ConsoleContainer>
   );
 };
 

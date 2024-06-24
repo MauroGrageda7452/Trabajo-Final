@@ -1,17 +1,20 @@
 'use client'
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
+import Button from "../componentes/ui/Button";
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/users/register', {
+            const response = await fetch('/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -21,6 +24,7 @@ const Register: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Failed to register');
             }
+            router.push('/login')
             //onRegister(); // Llamamos a la función pasada por prop para cambiar la vista
         } catch (err) {
             setError('Failed to register');
@@ -28,15 +32,15 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+        <div className="min-h-screen max-h-screen flex items-center justify-center bg-no-repeat bg-center" style={{ backgroundImage: "url('/images/bg-login.png')" }}>
+            <div className="bg-contain bg-no-repeat bg-center p-20" style={{ backgroundImage: "url('/elements/container.png')"}}>
+            <div className="bg-contain bg-center bg-no-repeat text-transparent w-full h-96 -mb-44 -mt-32" style={{ backgroundImage: "url('/elements/titulo.png')"}}>.</div>
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Register for an account</h2>
+                    <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900 -mb-16">Register for an account</h2>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm -space-y-px">
+                <form className="mt-8" onSubmit={handleSubmit}>
+                    <div className="bg-contain bg-no-repeat bg-center p-16" style={{ backgroundImage: "url('/elements/pass-container.png')"}}>
                         <div>
-                            <label htmlFor="username" className="sr-only">Username</label>
                             <input
                                 id="username"
                                 name="username"
@@ -45,7 +49,7 @@ const Register: React.FC = () => {
                                 required
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="mt-2 rounded-md p-1.5 w-full mb-2 placeholder-black placeholder-opacity-40 text-black bg-green-500"
                                 placeholder="Username"
                             />
                         </div>
@@ -59,7 +63,7 @@ const Register: React.FC = () => {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="rounded-md p-1.5 w-full mb-2 placeholder-black placeholder-opacity-40 text-black bg-green-500"
                                 placeholder="Email address"
                             />
                         </div>
@@ -73,7 +77,7 @@ const Register: React.FC = () => {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                className="rounded-md p-1.5 w-full mb-2 placeholder-black placeholder-opacity-40 text-black bg-green-500"
                                 placeholder="Password"
                             />
                         </div>
@@ -81,29 +85,20 @@ const Register: React.FC = () => {
 
                     {error && <div className="text-red-500 text-sm">{error}</div>}
 
-                    <div>
+                    <div className='flex flex-row justify-center items-center -mt-5'>
+                        <Button
+                        //type="submit"
+                            className="w-1/2 flex justify-center -ml-5 py-2 px-4 text-xl font-black text-gray-800"
+                            text="Register"
+                        />
                         <Link href="/login">
-                        <button
-                            type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Register
-                        </button>
+                            <Button 
+                                className="w-full ml-4 mr-3 flex justify-center py-2 px-4 text-xl font-black text-gray-800"
+                                text="Back to login"
+                            />
                         </Link>
                     </div>
                 </form>
-                <div className="mt-6 text-center">
-                    <span className="text-sm text-gray-600">Already have an account?</span>
-                    <Link href="/login">
-                        <button
-                            type="button"
-                            className="ml-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            //onClick={onRegister}
-                        >
-                            Log in
-                        </button>
-                    </Link>
-                </div>
             </div>
         </div>
     );
