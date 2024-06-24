@@ -66,7 +66,7 @@ const Game: React.FC = () => {
           }
           if (fetchedEdificios && fetchedRecursos) { // Verifica que los recursos estén disponibles antes de generarlos
           //   await Promise.all([
-              //generarRecursos(userId, setRecursosData)
+              generarRecursos(userId, setRecursosData)
           //   ]);
           }
 
