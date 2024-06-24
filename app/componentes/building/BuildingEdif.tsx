@@ -7,6 +7,7 @@ import partidas, { EdificioTerrenoType, PartidaType, TerrenoType } from "@/app/m
 import { fetchSave, updateSave } from "@/app/services/partida-seleccionada";
 import ConsoleContainer from "../ui/ConsoleContainer";
 
+
 interface Props {
   edificios: EdificioType[];
   recursos: PartidaType["recursos"];

@@ -4,7 +4,7 @@ import { UsuarioType } from "../models/usuarios";
 
 export const fetchSave = async (userId: number | null): Promise<PartidaType | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/saves/${userId}`);
+    const response = await fetch(`/api/saves/${userId}`);
     const data: PartidaType = await response.json()
     return data;
   } catch (error) {
@@ -15,7 +15,7 @@ export const fetchSave = async (userId: number | null): Promise<PartidaType | nu
 
 export const fetchSaveEdificios = async (base: boolean): Promise<EdificioType[] | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/api/buildings`);
+    const response = await fetch('/api/buildings');
     const data: EdificioType[] = await response.json()
     if (!base) data.shift();
 
@@ -33,7 +33,7 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
     // console.log(data)
     const player_id = data.id
     // console.log(player_id)
-    const response = await fetch(`http://localhost:3000/api/saves/${player_id}`, {
+    const response = await fetch(`/api/saves/${player_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const updateSave = async (data: PartidaType): Promise<PartidaType | null>
 
 export const fetchSaveUsuarios = async (): Promise<UsuarioType[] | null> => {
   try {
-    const response = await fetch('http://localhost:3000/api/users'); // Ruta del endpoint que devuelve la lista de usuarios
+    const response = await fetch('/api/users'); // Ruta del endpoint que devuelve la lista de usuarios
     //console.log(response)
     if (!response.ok) {
       throw new Error('Error al obtener la lista de usuarios');
