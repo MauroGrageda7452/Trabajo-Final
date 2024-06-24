@@ -14,7 +14,8 @@ const BuildingMensajes: React.FC<Props> = ({  }) => {
   const [messageText, setMessageText] = useState<string>("");
   const [usuarios, setUsuarios] = useState<UsuarioType[] | null>(null);
   const userId = Cookies.get('userId');
-  const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
+  const [messages, setMessages] = useState<{ text: string; sender: string; date: string }[]>([]);
+
 
 
   useEffect(() => {
@@ -25,18 +26,6 @@ const BuildingMensajes: React.FC<Props> = ({  }) => {
     fetchUsuarios();
   }, []);
 
-  // const handleSendMessage = () => {
-  //   if (selectedUser !== null) {
-  //     const currentDate = new Date(); // Obtener la fecha y hora actual
-  
-  //     console.log('ID de usuario:', userId);
-  //     console.log("Mensaje enviado al usuario con ID:", selectedUser);
-  //     console.log("Texto:", messageText);
-  //     console.log("Fecha y hora de envío:", currentDate); // Mostrar la fecha y hora en la consola
-  //   } else {
-  //     console.log("No se ha seleccionado ningún usuario.");
-  //   }
-  // };
 
   const handleSendMessage = async () => {
     if (selectedUser !== null) {
