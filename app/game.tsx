@@ -61,17 +61,6 @@ const Game: React.FC = () => {
             }
           });
 
-          // const containsEmptyElement = newBuildingImages.includes('');
-          // if(!containsEmptyElement){
-          //   newBuildingImages.push('')
-          //   const emptyTerrainKey = `pos${Object.keys(saveData.terreno).length + 1}`;
-          //     saveData.terreno[emptyTerrainKey] = {
-          //       edificio_id: -1,
-          //       edificio_nivel: 0,
-          //       edficio_trabajadores: 0,
-          //     };
-          //   await updateSave;
-          // }
           setTerrenoData(saveData.terreno)
           setBuildingImages(newBuildingImages);
           }
@@ -95,9 +84,13 @@ const Game: React.FC = () => {
     setRecursosData(updateRecursos);
   };
 
+  const handleTerrenoUpdate = (updateTerreno: PartidaType['terreno']) => {
+    setTerrenoData(updateTerreno);
+  }
+
   return (
     <main>
-        <Map recursos={recursosData} buildingImages={buildingImages} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} terreno={terrenoData}/>
+        <Map recursos={recursosData} onTerrenoUpdate={handleTerrenoUpdate} buildingImages={buildingImages} edificios={edificiosData} onRecursosUpdate={handleRecursosUpdate} partida={Number(userId)} terreno={terrenoData}/>
     </main>
   );
 }

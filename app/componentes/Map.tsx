@@ -17,6 +17,7 @@ interface MapProps {
   partida: number;
   buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
   terreno :TerrenoType | null;
+  onTerrenoUpdate : (updateTerreno : PartidaType['terreno']) => void;
 }
 
 const Map: React.FC<MapProps> = ({buildingImages,
@@ -24,7 +25,8 @@ const Map: React.FC<MapProps> = ({buildingImages,
    edificios,
     onRecursosUpdate, 
     partida,
-    terreno
+    terreno,
+    onTerrenoUpdate
   }) => {
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
@@ -78,7 +80,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
           <Button
             onClick={toggleMessages}
             className="text-gray-900 font-black mx-4 p-2"
-            text="Mensajes"
+            text="Mensajerías"
           />
           <LogoutButton />
           </div>
@@ -99,6 +101,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
           <div className="absolute top-0 w-full flex justify-center mt-5">
             <div className="w-1/2">
               <BuildingMenu 
+                onTerrenoUpdate={onTerrenoUpdate}
                 buildingImages={buildingImages} 
                 indiceTerreno={indiceTerreno}
                 edificios={edificios} 
@@ -120,6 +123,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
               partidaJugadorId={partida} 
               hideMenu={hideBuildEdif} 
               buildingImages={buildingImages}
+              onTerrenoUpdate={onTerrenoUpdate}
             />
           </div>
         )}
