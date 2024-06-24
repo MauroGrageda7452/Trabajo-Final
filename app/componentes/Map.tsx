@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useEffect, useState} from "react";
 import BuildingGrid from "./building/BuildingGrid";
 import Resources from "./Resources";
 import { PartidaType, TerrenoType } from "../models/partidas";
@@ -17,6 +17,8 @@ interface MapProps {
   partida: number;
   buildingImages: string[] | null; // Agregar prop para las imágenes de los edificios
   terreno :TerrenoType | null;
+  onTerrenoUpdate : (updateTerreno : PartidaType['terreno']) => void;
+
 }
 
 const Map: React.FC<MapProps> = ({buildingImages,
@@ -24,13 +26,18 @@ const Map: React.FC<MapProps> = ({buildingImages,
    edificios,
     onRecursosUpdate, 
     partida,
-    terreno
+    terreno,
+    onTerrenoUpdate
   }) => {
   const [showBuildMenu, setShowBuildMenu] = useState(false);
   const [indiceTerreno, setIndiceTerreno] = useState<number>(0);
   const [showBuildEdif, setShowBuildEdif] = useState(false);
   const [showMessages, setShowMessages] = useState(false); // Estado para controlar la visibilidad de BuildingMensajes
   //const []
+    useEffect(() =>{
+
+      console.log(terreno);
+    })
 
   const handleEmptyGroundClick = (index: number) => {
     setShowBuildMenu(true);
@@ -98,7 +105,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
         {showBuildMenu && (
           <div className="absolute top-0 w-full flex justify-center mt-5">
             <div className="w-1/2">
-              <BuildingMenu 
+              <BuildingMenu onTerrenoUpdate={onTerrenoUpdate}
                 buildingImages={buildingImages} 
                 indiceTerreno={indiceTerreno}
                 edificios={edificios} 
@@ -120,6 +127,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
               partidaJugadorId={partida} 
               hideMenu={hideBuildEdif} 
               buildingImages={buildingImages}
+              onTerrenoUpdate={onTerrenoUpdate}
             />
           </div>
         )}

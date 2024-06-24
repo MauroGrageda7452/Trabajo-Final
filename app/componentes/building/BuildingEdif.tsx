@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { EdificioType } from "@/app/models/edificios";
-import { NivelBaseUpgrade } from "../Edificios-funcional/base-fun";
+// import { NivelBaseUpgrade } from "../Edificios-funcional/base-fun";
 import { calculateTimeForBuilding, calculateAmountForBuilding} from "../Edificios-funcional/generarRecursos";
 import Button from "../ui/Button";
 import partidas, { EdificioTerrenoType, PartidaType, TerrenoType } from "@/app/models/partidas";
@@ -14,14 +14,23 @@ interface Props {
   hideMenu: () => void;
   indiceTerreno : number;
   buildingImages: string[] | null;
+  onTerrenoUpdate : (updateTerreno : PartidaType['terreno']) => void;
+
 }
 
-const BuildingEdif: React.FC<Props> = ({ edificios, recursos , indiceTerreno, partidaJugadorId, hideMenu, terreno, buildingImages}) => {
+const BuildingEdif: React.FC<Props> = ({ edificios, recursos ,
+  indiceTerreno, partidaJugadorId, hideMenu,
+   terreno, buildingImages, onTerrenoUpdate}) => {
   const [selectedBuilding, setSelectedBuilding] = useState<EdificioType | null>();
-  const [selectedBuildingAux, setselectedBuildingAux] = useState<EdificioTerrenoType>();
+  const [selectedBuildingAux, setSelectedBuildingAux] = useState<EdificioTerrenoType | null>(null);
   const [nivel, setNivel] = useState<number>(1);
   const [newWorkers, setNewWorkers] = useState<number>(0);
   const trabajadoresRequeridosPorNivel = [1, 10, 20];
+
+  // useEffect(() =>{
+  //   console.log(terreno);
+  // })
+
 
   useEffect(() => {
     handleItemClick();
@@ -32,7 +41,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , indiceTerreno, pa
       const key = Object.keys(terreno)[indiceTerreno];
       const edificioTerreno = terreno[key];
       if (edificioTerreno){
-        setselectedBuildingAux(edificioTerreno);
+        setSelectedBuildingAux(edificioTerreno);
         const edificioConstruido = edificios?.find(edificio => edificio.id === edificioTerreno.edificio_id);
         if (edificioConstruido){
         setSelectedBuilding(edificioConstruido);
@@ -51,7 +60,7 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , indiceTerreno, pa
       if (selectedBuildingAux.edificio_id === 0 && recursos) {
         setNivel(nuevoNivel);
         selectedBuildingAux.edificio_nivel = nuevoNivel;
-        setselectedBuildingAux(selectedBuildingAux);
+        setSelectedBuildingAux(selectedBuildingAux);
         recursos.chatarra_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.chatarra;
         recursos.comida_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.comida;
         recursos.agua_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.agua;
@@ -64,21 +73,27 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , indiceTerreno, pa
           edficio_trabajadores: 0,
         };
         if (buildingImages) {
+          buildingImages[indiceTerreno] = selectedBuilding.niveles[nuevoNivel].imagen;
           buildingImages.push('');
         }
+        onTerrenoUpdate(partidaActual.terreno);
         await updateSave(partidaActual);
+        //console.log(partidaActual)
+
       } else {
         if (recursos &&  selectedBuildingAux.edficio_trabajadores && selectedBuildingAux.edficio_trabajadores >= trabajadoresRequeridosPorNivel[nuevoNivel - 1]) {
           setNivel(nuevoNivel);
           selectedBuildingAux.edificio_nivel = nuevoNivel;
-          setselectedBuildingAux(selectedBuildingAux);
+          setSelectedBuildingAux(selectedBuildingAux);
           recursos.chatarra_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.chatarra;
           recursos.comida_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.comida;
           recursos.agua_jugador -= selectedBuilding.niveles[nuevoNivel].costoRecursoscreacion.agua;
           partidaActual.recursos = recursos;
           partidaActual.terreno[Object.keys(partidaActual.terreno)[indiceTerreno]].edificio_nivel = nuevoNivel;
           updateSave(partidaActual);
-          
+          if (buildingImages){
+            buildingImages[indiceTerreno] = selectedBuilding.niveles[nuevoNivel].imagen;
+          }
         } else {
           alert(`Necesitas ${trabajadoresRequeridosPorNivel[nuevoNivel - 1]} trabajadores para mejorar al nivel ${nuevoNivel}`);
         }
@@ -111,8 +126,10 @@ const BuildingEdif: React.FC<Props> = ({ edificios, recursos , indiceTerreno, pa
             selectedBuildingAux.edficio_trabajadores += newWorkers;
             partidaActual.terreno[key].edficio_trabajadores = selectedBuildingAux.edficio_trabajadores;
             partidaActual.recursos = recursos;
-            setselectedBuildingAux({ ...selectedBuildingAux });
+            setSelectedBuildingAux({ ...selectedBuildingAux });
+            
             await updateSave(partidaActual);
+            
           } else {
             console.error("No hay suficientes trabajadores disponibles");
           }
