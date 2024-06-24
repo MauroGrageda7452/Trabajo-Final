@@ -184,7 +184,7 @@ const Map: React.FC<MapProps> = ({buildingImages,
           </div>
         )}
         {showVisitBuildings && visitUserBuildings && (
-          <div className="absolute top-0 w-full h-full flex justify-center ">
+          <div className="absolute top-0 w-1/3 justify-center ">
           <MapVisit buildingImages={visitUserBuildings} hideMap={hideVisitMap}/>
           </div>
         )}

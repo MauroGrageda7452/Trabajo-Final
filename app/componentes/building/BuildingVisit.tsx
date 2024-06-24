@@ -38,35 +38,34 @@ const BuildingVisit: React.FC<BuildingVisitProps> = ({ onVisit }) => {
   }, [userId]);
 
   return (
-    <div className="container mx-auto p-4 grid grid-cols-3 gap-4 mt-4">
-      {/* Panel Izquierdo */}
-      <div className="w-1/2 bg-gray-200 p-4 rounded-lg">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Usuarios</h2>
-        <div className="space-y-2 overflow-y-auto">
-          {(usuarios || []).map((usuario) => (
-            <div
-              key={usuario.id}
-              onClick={() => handleUserClick(usuario.id)}
-              className={`p-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 text-gray-900 ${selectedUser === usuario.id ? "bg-gray-300" : ""}`}
-            >
-              {usuario.username}
-            </div>
-          ))}
+      <div className="container mx-auto p-4 grid grid-cols-3 gap-4 mt-4">
+         <div className="inset-14 top-0 absolute col-span-2 bg-contain bg-right bg-no-repeat" style={{ backgroundImage: "url('/images/planeta0.png')"}}>
+        {/* Panel Izquierdo */}
+        <div className="relative top-20 w-1/4 bg-gray-200 p-4 rounded-lg">
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Usuarios</h2>
+          <div className="space-y-2 overflow-y-auto">
+            {(usuarios || []).map((usuario) => (
+              <div
+                key={usuario.id}
+                onClick={() => handleUserClick(usuario.id)}
+                className={`p-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 text-gray-900 ${selectedUser === usuario.id ? "bg-gray-300" : ""}`}
+              >
+                {usuario.username}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      
-      {/* Contenido Principal */}
-      <div className="flex-1 flex flex-col justify-end items-end p-4">
-        <div className="ml-auto"> {/* Utilizamos ml-auto para alinear el contenido a la derecha */}
-          <Button
-            onClick={handleVisitClick}
-            className="text-white bg-blue-600 p-4 rounded-md"
-            text="Visitar"
-          />
-        </div>
+        {/* Botón "Visitar" */}
+      <div className="col-span-3 relative top-20 justify-center mt-4 w-20">
+        <Button
+          onClick={handleVisitClick}
+          className="text-white bg-blue-600 p-4 rounded-md"
+          text="Visitar"
+        />
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default BuildingVisit;
